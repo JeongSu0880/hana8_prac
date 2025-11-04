@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>first html</title>
+    <style>
+        h1 {
+            font-size: 1.4rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+        }
+
+        main,
+        article,
+        aside {
+            border: 1px solid red;
+        }
+
+        /* main section {
+            border: 2px dotted blue;
+        } */
+
+        .container>section {
+            border: 2px dotted blue;
+        }
+
+        .container {
+            background-color: yellow;
+            width: 100px;
+        }
+
+        ul li:first-child {
+            font-weight: 700;
+        }
+
+        ol li:nth-child(2n):not(.x) {
+            font-weight: 700;
+        }
+
+        /* 형제 표현 */
+        /* h1+nav {
+            color: blueviolet;
+        } */
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>h1</h1>
+        <nav>보통 로고 들어가는 자리</nav>
+    </header>
+    <!-- display flex는 인라인으로 바꾸느 것 (container는 기본 블록임) -->
+    <!-- align-items는 안에 있는 것들 ,justify-content는 그 컨텐츠 자체를  -->
+    <main style="display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            <!---        <section onclick="console.log('xxx')" aria-hidden="true">이게 몬소리일까-->
+            <section aria-label="section1" onclick="console.log('xxx')" aria-hidden="true">
+                <h3>Section</h3>
+                <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                </ul>
+            </section>
+            <article>
+                <h3>Article</h3>
+                <!-----ol>li{0$}*3----->
+                <ol>
+                    <li>01</li>
+                    <li><a href="#" onclick="" role="button"></a>02</li>
+                    <li class="x">03</li>
+                    <li>04</li>
+                    <li>05</li>
+                    <li>06</li>
+                    <li>07</li>
+                    <li>08</li>
+                </ol>
+            </article draggable="true">
+        </div>
+        <!-- 인라인 태그는 center가 안됨. 어디서부터 시작과 끝인지 모르니까 -->
+        <!-- <aside style="text-align: center; width: 100px;">Aside</aside> -->
+        <aside style="justify-content: center; display: flex; width: 100px; height: 200px; 
+        align-items: end;">Aside</aside>
+    </main>
+    <footer style="text-align: center;">&#169; Hanaro 2025</footer>
+</body>
+
+</html>

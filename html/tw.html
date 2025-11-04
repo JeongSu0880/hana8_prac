@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss-animate@1.0.7/dist/index.umd.js"></script>
+
+    <style type="text/tailwindcss">
+        @theme {
+        --color-clifford: #da373d;
+      }
+
+      /* 베이스는 기본 */
+      @layer base {
+        button {
+            @apply border border-green-500 bg-green-300 px-2 rounded-md cursor-pointer
+            hover:bg-green-500 hover:text-white active:ring-2 active:scale-105
+        }
+      }
+
+      /* 유틸리티는 기본에 + 되는 것 */
+      @layer utility {
+        .btn {
+            background-color: skyblue;
+        }
+      }
+    </style>
+</head>
+
+<body class="group h-screen bg-green-100 grid place-items-center">
+    <div class="flex flex-col md:flex-row [&>button]:shadow-md [&>button]:hover:shadow-xl gap-2">
+        <!-- place나 grid가 없으면 space-x-2 뭐 이런식으로, 있으면 gap 쓰면 됨 -->
+        <button class="">Button1</button>
+        <button class="btn text-white group-hover:border-black">Button2</button>
+        <button class="">Button3</button>
+        <h1 class="text-3xl font-bold underline text-clifford">
+            Hello world!
+        </h1>
+        <div class="border m-10 p-3 text-red-200">Div</div>
+
+        <div class="container flex gap-2 bg-white rounded-md p-2 shadow-md">
+            <img src="https://avatar.vercel.sh/s" alt="profile"
+                class="rounded-full size-16 group-hover:border border-gray-1000">
+            <div class="[&>small]:block [&>small]:text-gray-500">
+                <div class="email">indiflex.corp</div>
+                <small> 11 </small>
+                <small> 132 </small>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

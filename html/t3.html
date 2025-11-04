@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T3</title>
+    <style>
+        body {
+            background-color: yellow;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+            /* 그리드에 pic -> 화면 가운데로 가장 쉽게 맞추는 방법 */
+            /* vh 이건 스크린 기준으로 몇 퍼센트인지 */
+        }
+
+        .border {
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+        }
+
+        .container {
+            border: 1px solid #999;
+            width: 100%;
+            padding: .7rem;
+            display: block;
+            gap: 1rem;
+            border-radius: .7 rem;
+            background-color: aliceblue;
+            align-items: center;
+        }
+
+        .email {
+            font-weight: 700;
+        }
+
+        .signInForm {
+            width: 100%;
+            display: flex;
+            flex-direction: roe;
+            /* border: 2px solid red; */
+        }
+
+        small {
+            padding: 1px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="border">
+        <div class="container"
+            style="display: flex; border-radius: 5px; background-color: aliceblue; box-shadow: #999;">
+            <img src="https://avatar.vercel.sh/s" alt="profile" style="border-radius: 100%; width: 50px;">
+            <div>
+                <div class="email">indiflex.corp</div>
+                <small> 11 </small>
+                <small> 132 </small>
+            </div>
+        </div>
+        <form method="POST" class="signInForm">
+            <input type="text" name="id" value="a@gmail.com">
+            <input type="password" name="pw">
+            <button type="reset">Cancel</button>
+            <button type="submit">signIn</button>
+        </form>
+    </div>
+</body>
+
+</html>

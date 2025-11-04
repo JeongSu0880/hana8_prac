@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T2</title>
+    <style>
+        header {
+            margin: 5px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid green;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            /* font-size: 1.2em; */
+        }
+
+        nav {
+            margin: 0.5cap;
+            padding: 0.5cap;
+            border: 1px solid green;
+            border-radius: 50px;
+            text-align: center;
+        }
+
+        /* * {
+            border: 1px solid;
+        } */
+
+        footer {
+            margin: 0.5cap;
+            padding: 0.5cap;
+            border: 1px solid green;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .container {
+            width: 400px;
+            border: 2px dotted;
+            border-color: blue;
+            margin: 10px;
+            background-color: yellow;
+            padding: 2rem;
+            /* display: flex; */
+        }
+
+        img:not(.x) {
+            border: 3px dotted red;
+            margin-left: 15px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        aside {
+            height: 35vh;
+            border: 1px solid green;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>header</header>
+    <nav>nav</nav>
+    <main>
+        <div class="container">
+            <h1>main > container</h1>
+            <section>section</section>
+            <article style="font-size: 2rem;">
+                <h3>article - title</h3>
+                <figure style="display: inline-flex;">
+                    <img src="https://avatar.vercel.sh/s" alt="S" class="x" class="grad" />
+                    <img src="https://unsplash.com/photos/b51xWeb75R4/download?ixid=M3wxMjA3fDB8MXxhbGx8M3x8fHx8fHx8MTc2MTg3OTc1M3w&force=true"
+                        alt="lion" width="150" class="dot-red">
+                </figure>
+            </article>
+        </div>
+        <aside>aside</aside>
+    </main>
+    <footer class="text-center"><b>&#169; 시니어코딩</b></footer>
+</body>
+
+</html>
