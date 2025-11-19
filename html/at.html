@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Timer</title>
+</head>
+
+<body>
+    <div id="timer">00:00.000</div>
+    <button id="btn">START</button>
+    <script>
+        let msec = 0;
+        const $btn = document.getElementById('btn');
+        const $timer = document.getElementById('timer');
+
+        function formatTime(t) {
+            let time = t.toString().padStart(6, '0');
+            return time.slice(0, 2) + ":" + time.slice(2, 4) + "." + time.slice(4, 6);
+        }
+
+        let intl;
+        $btn.addEventListener('click', function () {
+            console.log(this.innerText);
+            if (this.innerText === 'START') {
+                this.innerText = 'STOP';
+                intl = setInterval(() => {
+                    $timer.innerHTML = formatTime(++msec)
+                }, 10);
+                //이건 오차를 없앨 수가 없다. 그래서 타이머 만들 때 setInterval을 쓰지 않는다.
+            }
+            else {
+                this.innerText = 'START';
+                clearInterval(intl)
+            }
+        });
+    </script>
+</body>
+
+</html>
