@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Timer</title>
+</head>
+
+<body>
+    <div id="timer">00:00.000</div>
+    <button id="btn">START</button>
+    <button id="btnClear">START</button>
+    <script>
+        let msec = 0;
+        const $btn = document.getElementById('btn');
+        const $btnClear = document.getElementById('btnClear');
+        const $timer = document.getElementById('timer');
+
+        let isRunning = false;
+        function rendering() {
+            $timer.innerHTML = formatTime(Date.now() - start - idle);
+            const left = 10 - Date.now() % 10;
+            if (isRunning) {
+                setTimeout(() => {
+                    rendering();
+                }, left)
+            }
+        }
+
+        $btnClear.addEventListener('click', function () {
+            // this.disabled = false; //이건 안돼?
+            $btnClear.disabled = false;
+            start = undefined;
+            idle = 0;
+            $timer.innerText = '00:00.000';
+        })
+
+        let start;
+        let stop;
+        let idle = 0;
+        $btn.addEventListener('click', function () {
+            console.log(this.innerText);
+            if (this.innerText === 'START') {
+                this.innerText = 'STOP';
+                isRunning = true;
+                if (start === undefined) {
+                    start = stop = Date.now();
+                }
+                idle += Date.now() - stop;
+                rendering();
+                $btnClear.disabled = true;
+            }
+            else {
+                this.innerText = 'START';
+                isRunning = false;
+                stop = Date.now();
+            }
+        });
+
+
+        function formatTime(millis) {
+            const m = Math.trunc(millis / 60000)
+            // const m = Math.trunc(millis / 60000).toString().padStart(2, '0')
+            const s = Math.trunc(millis / 1000)
+            const ms = Math.trunc(millis % 1000)
+            return `${m < 10 ? '0' : ''}:${s < 10 ? '0' : ''}:${ms < 100 ? ms < 10 ? '00' : '0' : ''}${ms}`;
+        }
+    </script>
+</body>
+
+</html>
