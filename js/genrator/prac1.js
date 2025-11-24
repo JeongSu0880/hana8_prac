@@ -155,4 +155,4 @@ assert.strictEqual([...route4].length, 48);
 
 // 은닉성 보장해야함.
 
-//1. startIdx, endIdx를 잡을 필요가 없다. 
+//1. startIdx, endIdx를 잡을 필요가 없다.           
