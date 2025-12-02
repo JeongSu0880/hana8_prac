@@ -90,3 +90,35 @@ assert.equal(`성동구${eunun('성동구')}`, '성동구는');
 assert.equal(`성동구${eulul('성동구')}`, '성동구를');
 assert.equal(`고성군${eyuya('고성군')}`, '고성군이어야');
 assert.equal(`성동구${eyuya('성동구')}`, '성동구여야');
+
+const searchByKoreanInitialSound = (data, first) => {
+    //idea !
+    // ㄱ  : ㄱ -깋
+    // ㄴ : ㄴ - 닣
+    // ㄱㄴ => [ㄱ가-깋][ㄴ나-닣]
+
+    const ㄱㄴㄷ = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ';
+    const 가나다 = '가나다라마바사아자차카타파하';
+
+    const reg = [...first].reduce((acc, c) => {
+        const idx = ㄱㄴㄷ.indexOf(c);
+        const S = 가나다[idx]
+        const 힣next = '힣'.charCodeAt(0) + 1;
+        const eCode = (가나다[idx + 1]?.charCodeAt() ?? 힣next) - 1
+        // const eCode = c === 'ㅎ' ? 가나다[가나다.length - 1].charCodeAt(0) : 가나다[idx + 1].charCodeAt(0) - 1;
+
+        return `${acc}[${c}${S}-${String.fromCharCode(eCode)}]`;
+    }, (''))
+    const regex = new RegExp(reg);
+    return data.filter(item => regex.test(item));
+}
+s = ['강원도 고성군', '고성군 토성면', '토성면 북면', '북면', '김1수', '하남시', '홍길동']
+//끝지점에 대한 테스트 코드를 항상 넣어라
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㄱㅇ'), ['강원도 고성군']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㄱㅅㄱ'), ['강원도 고성군', '고성군 토성면']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㅌㅅㅁ'), ['고성군 토성면', '토성면 북면']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㅂㅁ'), ['토성면 북면', '북면']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㅍㅁ'), []);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㅎ'), ['하남시', '홍길동']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㅎㄱ'), ['홍길동']);
+assert.deepStrictEqual(searchByKoreanInitialSound(s, 'ㄱ1ㅅ'), ['김1수']);
