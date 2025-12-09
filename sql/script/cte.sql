@@ -70,12 +70,12 @@ select p.dname parent, d.dname me
 select * from Dept;
 select id, pid, concat(pid, '-', id) from Dept;
 select id, pid, id from Dept where pid = 0;
-with recursive DeptHierachy (id, pid, h) AS (
-	select id, pid, concat(pid, '-', id) from Dept where pid = 0
+with recursive DeptHierachy (id, dname, pid, h) AS (
+	select id, dname, pid, concat(pid, '-', cast(id as char(10))) from Dept where pid = 0 -- casting을 하지 않아서 생긴 문제 
     UNION ALL
-    select d.id, d.pid, concat(p.h, '-', d.id) from Dept d inner join DeptHierachy p on p.id = d.pid where d.id < 10 and d.pid <> 0
+    select d.id, d.dname, d.pid, concat(p.h, '-', d.id) from Dept d inner join DeptHierachy p on p.id = d.pid where d.id <= 10 and d.pid <> 0
 )
-select pid, h, id from DeptHierachy;
+select pid, dname, id from DeptHierachy order by h;
 
 -- answer
 select p.dname, d.dname, concat(p.id, '-', d.id) h 
@@ -92,4 +92,68 @@ with recursive CteDept (id, dname, depth, h) AS (
 )
 select concat(repeat(' -> ', depth), dname) from CteDept order by h;
     
+select row_number() over (order by dept, salary desc) '순번', e.*,
+    avg(salary) over w '급여 평균',
+    sum(salary) over w '급여 누적치'
+  from Emp e
+ where ename like '박%'
+ window w as (partition by dept order by salary desc);
+
+select p.id pid, d.id did, 
+		(case when p.id is not null then max(p.dname) else '소계' end) pname,
+        (case when d.id is not null then max(d.dname) else '소계' end) dname, 
+        format(sum(e.salary), 0)
+	from Dept p inner join Dept d on p.id = d.pid
+				inner join Emp e on e.dept = d.id
+	group by d.id, p.id
+    with rollup ;
+
+select p.id pid, d.id did, 
+		max(p.dname) pname,
+        max(d.dname) dname, 
+        format(sum(e.salary), 0)
+	from Dept p inner join Dept d on p.id = d.pid
+				inner join Emp e on e.dept = d.id
+	group by d.id, p.id
+    with rollup ;
+
+-- 뭔가 셀프 조인은... 내 레코드 말고 디른 레코드가 필요할 때,, 
+
+
+select d.id, max(d.dname), avg(e.salary), sum(e.salary)
+	from Dept d inner join Emp e on d.id = e.dept
+    group by d.id
+    order by d.id;
+
+select avg(if(dept = 5,salary, null)) from Emp; 
+select avg(if(dept = 4, salary, null)) from Emp;
+select '평균급여' as '구분',
+		avg(case when dept = 3 then salary end) as '영업1팀', 
+        avg(if(dept = 4, salary, null)) '영업2팀',
+        avg(if(dept = 5, salary, null)) '영업3팀',
+        avg(if(dept = 6, salary, null)) '서버팀',
+        avg(if(dept = 7, salary, null)) '클라이언트팀'
+	from Emp
+UNION
+select '총 급여',
+		sum(case when dept = 3 then salary end) as '영업1팀', 
+        sum(if(dept = 4, salary, null)) '영업2팀',
+		sum(if(dept = 5, salary, null)) '영업3팀',
+        sum(if(dept = 6, salary, null)) '서버팀',
+        sum(if(dept = 7, salary, null)) '클라이언트팀'
+	from Emp;
+
+
+-- 요령 -> 구조를 만들어놓고 하는 것. 
+
+
+
+
+
+
+
+
+
+
+
 
