@@ -104,3 +104,20 @@ call sp_emps_by_deptid(1);
 call sp_emps_by_deptid(-1);
 
 call sp_depts_by_cursor();
+
+select * from Emp where id in (3, 5);
+select * from Emp;
+select * from Dept;
+
+update Dept set captain = null where id > 0;
+
+select min(ename) from Emp group by dept having dept = 4;
+update Dept set captain = (select id from Emp where Dept.id = Emp.dept order by ename limit 1) where id > 0;
+
+select current_date();
+update Emp e left outer join Dept d on e.id = d.captain set e.outdt = current_date(), d.captain = null where e.id in (14, 26);
+
+
+update Emp e left outer join Dept d on e.id = d.captain
+	set e.outdt = curdate(), d.captain = null
+    where e.id in (14, 26);
