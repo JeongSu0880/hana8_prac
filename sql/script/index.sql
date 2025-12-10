@@ -23,3 +23,7 @@ explain select * from Student where substring(mobile, -4) = '1012';
 -- insert를 할 때에도 page spliting 이 일어남. 이 부분이 부담이 될 수 있는 것. 
 
 -- 그래서 실무에서 10만개의데이터가 쌓인 테이블은 뭐가 됐든 함부로 건들면 안 됨.  
+
+select * from Student s where exists(select * from Student where major > s.major);
+
+
