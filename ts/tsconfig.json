@@ -8,7 +8,9 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    "types": [
+      "node"
+    ], // 여기에 내가 추가로 설치하더나 만든 타입들을 넣어야 함.
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
