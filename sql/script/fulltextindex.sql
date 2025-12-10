@@ -80,3 +80,73 @@ select * from Notice where match(title, contents) against('무신* 문신* -후�
 -- ex3) 문신과 무신 중 중기 인물만 출력하시오.
 select * from Notice where match(title, contents) against('무신* 문신* +중기*' IN boolean mode);
 
+select count(*), count(1), sum(case when gender = 1 then 1 else ~0 end) from Emp;
+
+create table PartiRangeTest (
+  studentno varchar(7) not null,
+  enteryear smallint not null,
+  studentname varchar(31) not null 
+)
+Partition by RANGE(enteryear) (
+    partition p1 values less than(2000),
+    partition p2 values less than(2010),
+    partition p3 values less than MAXVALUE
+);
+
+insert into PartiRangeTest(studentno, enteryear, studentname)
+  values ('8809080', 1988, '팔팔학번'),
+         ('0809080', 2008, '공팔학번'),
+         ('1809080', 2018, '일팔학번');
+         
+-- ex1) Emp 테이블과 동일한 데이터로 TestEmp 테이블을 생성하고, PK는 id (auto_increment)로 정한 후 id의 값을 기준으로 1~99, 100~199, 200 이상을 기준으로 세 개의 partition으로 나눠 보세요.
+-- create table TestEmp AS select * from Emp; 이렇게 하면 다른 정보 없이 데이터만 복사됨.
+
+create table TestEmp like Emp; -- 이렇게 해야지 pk fk 정보 그대로 같은 테이블이 생성됨 , 이후에 데이터 복사
+show create table TestEmp;
+insert into TestEmp select * from Emp;
+select * from Emp;
+alter table TestEmp partition by range(id) (
+	partition p1 values less than(100),
+    partition p2 values less than(200),
+    partition p3 values less than MAXVALUE
+); 
+-- ex2) 위에서 만든 TestEmp의 partition2(id값 100~199)를 지워보세요. 데이터가 어떻게 변하나요?
+
+alter table TestEmp drop partition p2;
+select * from TestEmp where id = 150; -- 헉 이러니까 해당 파티션의 데이터가 같이 날라가버렷다..!! 
+
+-- ex3) 다시 id 150인 데이터를 insert 해 보세요. 어느 partition에 들어가나요? 그리고 partition3을 200을 기준으로 다시 나눠보세요.
+insert into TestEmp(id, ename, dept, salary) values(150, '김찬라', 1, 200);
+show create table TestEmp;
+select * from TestEmp where id = 150; -- 잉 근데 데이터가 어느 파티션에 있느지 어케 알아요.네?
+
+EXPLAIN select * from TestEmp where id = 150;-- 이렇게 파티션 확인 가능! 
+
+show table status like '%Emp%'; -- 이거. show table status는 정기적으로 도는 명령어라 최신값이 아닐 수 잇다. 그래서
+-- show create table 를 쓰는 게 안전
+
+alter table TestEmp reorganize partition p3 into (
+	partition p3 values less than(200),
+    partition p4 values less than MAXVALUE
+);
+/* 
+'CREATE TABLE `TestEmp` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ename` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dept` tinyint unsigned NOT NULL,
+  `salary` int NOT NULL DEFAULT ''0'',
+  `auth` tinyint(1) NOT NULL DEFAULT ''9'' COMMENT ''1:admin, 3: manager, 5:employee, 7:temporary, 9:guest'',
+  `outdt` date DEFAULT NULL COMMENT ''퇴사일'',
+  `remark` json DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dept` (`dept`),
+  KEY `idx_Emp_ename_dept` (`dept`,`ename`)
+) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+/*!50100 PARTITION BY RANGE (`id`)
+(PARTITION p1 VALUES LESS THAN (100) ENGINE = InnoDB,
+ PARTITION p3 VALUES LESS THAN (200) ENGINE = InnoDB,
+ PARTITION p4 VALUES LESS THAN MAXVALUE ENGINE = InnoDB) */
+ 
+select * from information_schema.libraries;
+
+use mysql;
