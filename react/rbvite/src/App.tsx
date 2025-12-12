@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import Hello from './components/Hello';
 import My from './components/My';
 
@@ -74,10 +74,22 @@ function App() {
     // session.cart = [...session.cart.filter(i => i.id !== id)];
   } //세션의 주소도 바뀌고 카드의 주소도 바뀌엇다.
 
+  const addItem = (name: string, price: number) => {
+    const newItem = {
+      id: Math.max(...session.cart.map(item => item.id), 0) + 1,//max는 arr로 받을 수가 없다.
+      name, price
+    }
+
+    setSession({
+      ...session,
+      cart: [...session.cart, newItem]
+    })
+  }
+
   return (
     <div className='grid place-items-center h-screen'>
       <h1 className='text-3xl'>count: {count}</h1>
-      <My removeItem={removeItem} session={session} logout={logout} login={login} />
+      <My addItem={addItem} removeItem={removeItem} session={session} logout={logout} login={login} />
       <Hello
         name={session.loginUser?.name}
         age={session.loginUser?.age}

@@ -1,23 +1,26 @@
 import type { PropsWithChildren } from 'react';
 
 type Prop = {
-  className: string;
-  onClick?: () => void;
+    className: string;
+    onClick?: () => void;
+    type?: 'reset' | 'submit';
 };
 
 export default function Button({
-  onClick,
-  className,
-  children,
+    onClick,
+    className,
+    children,
+    type
 }: PropsWithChildren<Prop>) {
-  return (
-    <button
-      className={`border py-1 px-2 rounded-md cursor-pointer ${className}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
+    return (
+        <button
+            className={`border py-1 px-2 rounded-md cursor-pointer ${className}`}
+            onClick={onClick}
+            type={type}
+        >
+            {children}
+        </button>
+    );
 }
 
 //기본적으로 린트는 한개의 파일에 한개의 컴포넌트만 export하는 것을 원칙으로 함.
