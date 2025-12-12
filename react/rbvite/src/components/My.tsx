@@ -1,16 +1,17 @@
-import type { Session } from "../App";
+import type { Session, LoginFunction } from "../App";
 import Login from "./Login";
 import Profile from "./Profile";
 import Small from "./ui/Small";
 
 type Prop = {
     session: Session;
+    login: LoginFunction;
     logout: () => void;
 }
 
-export default function My({ session, logout }: Prop) {
+export default function My({ session, logout, login }: Prop) {
     return <>
-        {session?.loginUser ? <Profile loginUser={session.loginUser} logout={logout} /> : <Login />}
+        {session?.loginUser ? <Profile loginUser={session.loginUser} logout={logout} /> : <Login login={login} />}
         <hr />
         <ul>
             {

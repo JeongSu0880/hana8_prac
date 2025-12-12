@@ -24,6 +24,8 @@ const DefaultSession: Session = {
 // export const Hello = (prop: { name: string; }) => <h2>Hello, {prop.name}</h2>;
 //여기서 prop은 상태이지만 아래의 useState와 다르게 변경할 숭 ㅣㅅ는 방법이 없어. 그래서 readonly인 것.
 
+export type LoginFunction = (name: string, age: number) => void;
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -43,7 +45,11 @@ function App() {
   const plusCount = () => setCount((prevCount) => prevCount + 1);// stateAction 함수는 항상 이전값을 전달하니까
   // 호출 횟수 만큼 증가가 되는 것임.
 
+  const login: LoginFunction = (name, age) => {
+    if (!name || !age) return alert('Input Name and Age, plz!');
 
+    setSession({ ...session, loginUser: { id: 1, name, age } })
+  }
   //위 처럼 타입을 명시할 수도 있지만 추론이 가능한 건 생략하는게 좋다.
   // x = 0; // useState에 들어있는 이 값은 싱글톤이야. if (x === undefined)일 때만 초기화 한다. 그러니까 매번 호출될때도 생성되는게 아니고 유지되는 것임. 그래서 빠르다 .
   // function setAction(y) {this.x = typeof y === 'func' ? y(x): y; render();} // 여기서 이전 x값을 매개변수로 주는 것은 약속임니다. 또, render()
@@ -57,7 +63,7 @@ function App() {
   return (
     <div className='grid place-items-center h-screen'>
       <h1 className='text-3xl'>count: {count}</h1>
-      <My session={session} logout={logout} />
+      <My session={session} logout={logout} login={login} />
       <Hello name={session.loginUser?.name} age={session.loginUser?.age} plusCount={plusCount}>반갑다고</Hello>
     </div > //어 그런데 여기서 setCount처럼 stateAction을 직접 주는 것은 안티패턴!!
   );
