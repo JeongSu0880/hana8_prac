@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
-import Button from './ui/Button';
+import { useEffect, useRef, type FormEvent } from 'react';
 import type { LoginFunction } from '../App';
 import LabelInput from './ui/LabelInput';
 
@@ -38,36 +37,6 @@ export default function Login({ login }: Props) {
             <form onSubmit={makeLogin} className='space-y-3'>
                 <LabelInput label='Name' ref={nameRef} placeholder='name...'></LabelInput>
                 <LabelInput type='number' label='Age' ref={ageRef} placeholder='age...'></LabelInput>
-
-                {/* <div>
-                    <label htmlFor='name' className='text-sm text-gray-500'>
-                        Name
-                    </label>
-                    <input
-                        type='text'
-                        id='name'
-                        placeholder='user name..'
-                        className='w-full'
-                        // ref={ageRef}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    ></input>
-                </div> */}
-                {/* <div>
-                    <label htmlFor='age' className='text-sm text-gray-500'>
-                        Age
-                    </label>
-                    <input
-                        type='text'
-                        id='age'
-                        placeholder='user age..'
-                        className='w-full'
-                        ref={ageRef}
-                        // onChange={(e) => setAge(+e.target.value)} //값이 하나도 없을때는 NAN
-                        required
-                    ></input>
-                </div> */}
-
                 <div className=''>
                     <button type='reset'>Cancel</button>
                     <button type='submit'>Submit</button>
@@ -92,3 +61,34 @@ export default function Login({ login }: Props) {
 //             <Button className='w-full h-10 bg-gray-50 border-amber-50 hover:bg-gray-300'>Sign in</Button>
 //         </div>
 //     </div>
+
+
+
+{/* <div>
+                    <label htmlFor='name' className='text-sm text-gray-500'>
+                        Name
+                    </label>
+                    <input
+                        type='text'
+                        id='name'
+                        placeholder='user name..'
+                        className='w-full'
+                        // ref={ageRef}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    ></input>
+                </div> */}
+{/* <div>
+                    <label htmlFor='age' className='text-sm text-gray-500'>
+                        Age
+                    </label>
+                    <input
+                        type='text'
+                        id='age'
+                        placeholder='user age..'
+                        className='w-full'
+                        ref={ageRef}
+                        // onChange={(e) => setAge(+e.target.value)} //값이 하나도 없을때는 NAN
+                        required
+                    ></input>
+                </div> */}

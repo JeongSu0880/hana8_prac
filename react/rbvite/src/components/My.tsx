@@ -13,10 +13,10 @@ type Prop = {
     logout: () => void;
     removeItem: (id: number) => void
     addItem: (name: string, price: number) => void
+    modifyItem: (name: string, price: number) => void
 };
 
-export default function My({ session, logout, login, removeItem, addItem }: Prop) {
-    const idRef = useRef<HTMLInputElement>(null)
+export default function My({ session, logout, login, removeItem, addItem, modifyItem }: Prop) {
     const priceRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
 
@@ -45,11 +45,12 @@ export default function My({ session, logout, login, removeItem, addItem }: Prop
             return;
         }
 
-        addItem(name ?? '', Number(price));
+        session.cart.find(item => item.name === name) ?
+            modifyItem(name ?? '', Number(price)) : addItem(name ?? '', Number(price));
+
         if (nameRef.current && priceRef.current) {
             nameRef.current.value = '';
             priceRef.current.value = '';
-
         }
     }
     return (
