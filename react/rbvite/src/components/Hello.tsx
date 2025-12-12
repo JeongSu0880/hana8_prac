@@ -18,18 +18,18 @@ type Prop = PropsWithChildren<{
 }>;
 
 export default function Hello({ name, age, children, plusCount }: Prop) {
-  return <div className='border p-3 border-red-200 text-center'>
-    <h2>Hello, {name || 'guest'}
-      {age && <small className='test-sm'>({age})</small>}
-    </h2>
-    <div>{children}</div>
-    <Button
-      className='font-bold'
-      onClick={plusCount}
-    >
-      count is 1
-    </Button>
-  </div>;
+  return (
+    <div className='border p-3 border-red-200 text-center'>
+      <h2>
+        Hello, {name || 'guest'}
+        {age && <small className='test-sm'>({age})</small>}
+      </h2>
+      <div>{children}</div>
+      <Button className='font-bold' onClick={plusCount}>
+        count is 1
+      </Button>
+    </div>
+  );
 }
 // 함수 컴포넌트는 꼭 JSX를 리턴해야함.
 

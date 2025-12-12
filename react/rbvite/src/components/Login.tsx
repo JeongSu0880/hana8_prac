@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import Button from "./ui/Button"
+import Button from './ui/Button';
 import type { LoginFunction } from '../App';
+import LabelInput from './ui/LabelInput';
 
 type Props = {
     login: LoginFunction;
-}
+};
 
 export default function Login({ login }: Props) {
     const [name, setName] = useState('');
@@ -12,9 +13,12 @@ export default function Login({ login }: Props) {
 
     return (
         <div className='border border-red-300 p-3 rounded-lg'>
-            <h1 className="text-2xl text-center font-medium">Login</h1>
+            <h1 className='text-2xl text-center font-medium'>Login</h1>
             <form className='space-y-3'>
-                <div>
+                <LabelInput label='Name' onChange={e => setName(e.target.value)} placeholder='name...'></LabelInput>
+                <LabelInput type='number' label='Age' onChange={e => setAge(+e.target.value)} placeholder='age...'></LabelInput>
+
+                {/* <div>
                     <label htmlFor='name' className='text-sm text-gray-500'>
                         Name
                     </label>
@@ -23,12 +27,11 @@ export default function Login({ login }: Props) {
                         id='name'
                         placeholder='user name..'
                         className='w-full'
-                        onChange={e => setName(e.target.value)}
+                        onChange={(e) => setName(e.target.value)}
                         required
-                    >
-                    </input>
-                </div>
-                <div>
+                    ></input>
+                </div>  */}
+                {/* <div>
                     <label htmlFor='age' className='text-sm text-gray-500'>
                         Age
                     </label>
@@ -37,18 +40,21 @@ export default function Login({ login }: Props) {
                         id='age'
                         placeholder='user age..'
                         className='w-full'
-                        onChange={e => setAge(+e.target.value)} //값이 하나도 없을때는 NAN
+                        onChange={(e) => setAge(+e.target.value)} //값이 하나도 없을때는 NAN
                         required
-                    >
-                    </input>
-                </div>
+                    ></input>
+                </div> */}
 
-                <Button onClick={() => login(name, age)} className='bg-sky-500 hover:bg-sky-300 text-white'>Login</Button>
+                <Button
+                    onClick={() => login(name, age)}
+                    className='bg-sky-500 hover:bg-sky-300 text-white'
+                >
+                    Login
+                </Button>
             </form>
         </div>
-    )
+    );
 }
-
 
 // <div>
 //         <div className='flex space-x-10'>
@@ -59,4 +65,3 @@ export default function Login({ login }: Props) {
 //             <Button className='w-full h-10 bg-gray-50 border-amber-50 hover:bg-gray-300'>Sign in</Button>
 //         </div>
 //     </div>
-
