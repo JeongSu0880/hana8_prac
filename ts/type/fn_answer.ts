@@ -141,5 +141,5 @@ users.firstObject = kimx;
 users.lastObject = hongx;
 console.log('first/last=', users.firstObject.name, users.lastObject.name); // kim/hong
 
-//infer를 사용하기
-//extends를 쓰자.
+
+//as 도 활용 잘 하는 법

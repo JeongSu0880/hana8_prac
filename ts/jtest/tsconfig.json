@@ -3,39 +3,41 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    "outDir": "./dist",
+    // "outDir": "./dist",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
     "types": [
-      "node"
-    ], // 여기에 내가 추가로 설치하더나 만든 타입들을 넣어야 함.
+      "node",
+      "jest"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
     // Other Outputs
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": true,
-    "declarationMap": false,
+    "declarationMap": true,
+    "noEmit": true,
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
     // Recommended Options
-    "strict": true, //이거 중요, 타이트한 타입체크를 한다는 것. 거의 무조건 true해라 타스를 쓴다면
-    "jsx": "react-jsx", //지우고 ctrl space하면 추천이 여러개 뜬다.
-    "verbatimModuleSyntax": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    // "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
-    // "moduleDetection": "force",
+    "moduleDetection": "force",
     "skipLibCheck": true,
   }
 }

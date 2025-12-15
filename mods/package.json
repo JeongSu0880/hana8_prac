@@ -1,0 +1,25 @@
+{
+  "name": "hanaro8",
+  "version": "0.0.1",
+  "description": "hanaro8",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "dev:watch": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jeongsu/hararo_8.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "Jeongsu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jeongsu/hararo_8/issues"
+  },
+  "homepage": "https://github.com/Jeongsu/hararo_8#readme"
+}
