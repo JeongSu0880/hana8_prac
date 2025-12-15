@@ -1,6 +1,7 @@
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import Hello from './components/Hello';
 import My from './components/My';
+import type { LoginFocusHandler } from './components/Login';
 
 type Item = {
   id: number;
@@ -36,8 +37,8 @@ export type LoginFunction = (name: string, age: number) => void;
 function App() {
   const [count, setCount] = useState(0);
   //setCount 안에서 render를 불러서 coount를 바꿈?????????
-  const x = count;
-  console.log('🚀 ~ App ~ x:', x);
+  const loginRef = useRef<LoginFocusHandler>(null)
+
   const [session, setSession] = useState<Session>(DefaultSession);
   const logout = () => {
     setSession({ ...session, loginUser: null });
@@ -51,8 +52,13 @@ function App() {
   // 호출 횟수 만큼 증가가 되는 것임.
 
   const login: LoginFunction = (name, age) => {
-    if (!name || !age) return alert('Input Name and Age, plz!');
+    // if (!name || !age) return alert('Input Name and Age, plz!');
 
+    const noInput = loginRef.current?.alertForNoInput();
+    if (noInput) {
+      loginRef.current?.focus(noInput);
+      return;
+    }
     setSession({ ...session, loginUser: { id: 1, name, age } });
   };
   //위 처럼 타입을 명시할 수도 있지만 추론이 가능한 건 생략하는게 좋다.
@@ -97,7 +103,7 @@ function App() {
   return (
     <div className='grid place-items-center h-screen'>
       <h1 className='text-3xl'>count: {count}</h1>
-      <My modItem={modItem} addItem={addItem} removeItem={removeItem} session={session} logout={logout} login={login} />
+      <My ref={loginRef} modItem={modItem} addItem={addItem} removeItem={removeItem} session={session} logout={logout} login={login} />
       <Hello
         name={session.loginUser?.name}
         age={session.loginUser?.age}

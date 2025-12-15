@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 type Prop = {
-    className: string;
+    className?: string;
     onClick?: () => void;
     type?: 'reset' | 'submit';
 };

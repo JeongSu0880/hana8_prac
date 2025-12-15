@@ -1,12 +1,18 @@
-import { useEffect, useRef, type FormEvent } from 'react';
+import { useEffect, useImperativeHandle, useRef, type FormEvent, type RefObject } from 'react';
 import type { LoginFunction } from '../App';
 import LabelInput from './ui/LabelInput';
 
 type Props = {
     login: LoginFunction;
+    ref: RefObject<LoginFocusHandler | null>
 };
 
-export default function Login({ login }: Props) {
+export type LoginFocusHandler = {
+    focus: (refName: 'age' | 'name') => void
+    alertForNoInput: () => 'age' | 'name' | undefined
+}
+
+export default function Login({ login, ref }: Props) {
     // const [name, setName] = useState('');
     // const [age, setAge] = useState(0);
     // console.log(`name ${name} age ${age}`)
@@ -20,6 +26,45 @@ export default function Login({ login }: Props) {
 
     const ageRef = useRef<HTMLInputElement>(null);// Dom을 참조하면 반드시 초깃값이 null 왜냐면 그리기 전이니까 앙ㄱ
     const nameRef = useRef<HTMLInputElement>(null);
+
+
+    // const validate = () => {
+    //     if (!nameRef.current?.value) {
+    //         alert('Input the name!');
+    //         nameRef.current?.focus();
+    //         return false;
+    //     }
+
+    //     if (!ageRef.current?.value) {
+    //         alert('Input the age!')
+    //         ageRef.current?.focus();
+    //         return false
+    //     }
+    //     return true;
+    // }
+    const alertForNoInput = () => {
+        if (ageRef.current && !!ageRef.current.value) {
+            alert('나이를 입력하세요')
+            return ('age');
+        }
+        if (nameRef.current && !!nameRef.current.value) {
+            alert('이름을 입력하세요')
+            return ('name');
+        }
+    }
+    const focus = (refName: 'age' | 'name') => {
+        if (refName === 'age') {
+            ageRef.current?.focus();
+        } else if (refName === 'name') {
+            nameRef.current?.focus();
+        }
+    }
+
+    const loginFocusHandler = {
+        focus,
+        alertForNoInput
+    }
+    useImperativeHandle(ref, () => loginFocusHandler);
 
 
     useEffect(() => {

@@ -7,9 +7,10 @@ type Props = {
     // onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     className?: string;
     placeholder?: string;
+    defaultValue?: string
 }
 
-export default function LabelInput({ type, label, ref, className, placeholder }: Props) {
+export default function LabelInput({ type, label, ref, className, placeholder, defaultValue }: Props) {
     const inputId = useId();
     return (
         <div>
@@ -22,6 +23,7 @@ export default function LabelInput({ type, label, ref, className, placeholder }:
                 placeholder={placeholder}
                 className={`w-full ${className}`}
                 ref={ref}
+                defaultValue={defaultValue}
                 // onChange={onChange} //값이 하나도 없을때는 NAN
                 required
             ></input>
