@@ -1,5 +1,5 @@
 import { PlusIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { useSession } from '../hooks/SessionContext';
 import Item from './Item';
 import Login from './Login';
@@ -8,7 +8,14 @@ import Button from './ui/Button';
 
 export default function My() {
   const { session } = useSession();
-  const [isAdding, setAdding] = useState(false);
+  // const [isAdding, setAdding] = useState(false);
+  // const toggleAdding = () => setAdding((prev) => !prev)
+  //이거 두개나 사용하는 것은 비효율적
+  const [isAdding, toggleAdding] = useReducer(pre => !pre, false)
+  //Reducer -> useState 하나와 함수 하나를 합칠 수 있어요.
+  const [totalPrice, addPrice] = useReducer((pre, action) => pre + action, 0)
+
+
   const profileHandlerRef = useRef<ProfileHandler>(null);
 
   const item101 = session.cart.find((item) => item.id === 101);
@@ -40,15 +47,31 @@ export default function My() {
           {isAdding ? (
             <Item
               item={{ id: 0, name: 'New Item', price: 3000 }}
-              toggleAdding={() => setAdding(false)}
+              toggleAdding={toggleAdding}
             />
           ) : (
-            <Button onClick={() => setAdding(true)} className=''>
+            <Button onClick={toggleAdding} className=''>
               <PlusIcon />
             </Button>
           )}
         </li>
-      </ul>
+      </ul >
     </>
   );
 }
+
+
+/* Reducer 함수의 내부 구조
+
+  function useReducer(reducer, initValueOrFuntion) {
+    const [state, setState] = useState(initValueOrFuntion);
+    -> dispath함수는 toggleAdding이고, reducer함수는 pre => !pre라고 할 수 잇다.
+    const dispatch = (action) => {
+      setState(reducer(preState, action))
+    }
+
+    return [state, dispatch];
+  }
+
+  몇년 전 카카오 코테에서 useState를 useReducer로 , useReducer를 useState로 구현해보시라고 나왔다고 하네요.
+*/
