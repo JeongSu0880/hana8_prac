@@ -11,6 +11,10 @@ type Item = {
 export type LoginUser = { id: number; name: string; age: number };
 export type LoginFunction = (name: string, age: number) => void;
 
+export type LoginHandler = {
+    validate: () => void
+    focus: () => void
+}
 export type Session = {
     loginUser: LoginUser | null;
     cart: Item[];
