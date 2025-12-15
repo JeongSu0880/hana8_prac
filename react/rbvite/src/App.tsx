@@ -86,18 +86,18 @@ function App() {
     })
   }
 
-  const modifyItem = (name: string, price: number) => {
+  const modItem = (name: string, price: number) => {
     const item = session.cart.find(i => i.name === name)
     if (item) item.price = price;
-    setSession({
-      ...session
-    })
+    setSession(
+      { ...session }
+    )
   }
 
   return (
     <div className='grid place-items-center h-screen'>
       <h1 className='text-3xl'>count: {count}</h1>
-      <My modifyItem={modifyItem} addItem={addItem} removeItem={removeItem} session={session} logout={logout} login={login} />
+      <My modItem={modItem} addItem={addItem} removeItem={removeItem} session={session} logout={logout} login={login} />
       <Hello
         name={session.loginUser?.name}
         age={session.loginUser?.age}
