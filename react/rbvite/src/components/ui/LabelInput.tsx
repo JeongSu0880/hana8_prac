@@ -8,9 +8,10 @@ type Props = {
     className?: string;
     placeholder?: string;
     defaultValue?: string
+    required?: boolean
 }
 
-export default function LabelInput({ type, label, ref, className, placeholder, defaultValue }: Props) {
+export default function LabelInput({ type, label, ref, className, placeholder, defaultValue, required }: Props) {
     const inputId = useId();
     return (
         <div>
@@ -25,7 +26,7 @@ export default function LabelInput({ type, label, ref, className, placeholder, d
                 ref={ref}
                 defaultValue={defaultValue}
                 // onChange={onChange} //값이 하나도 없을때는 NAN
-                required
+                required={required}
             ></input>
         </div>
     )

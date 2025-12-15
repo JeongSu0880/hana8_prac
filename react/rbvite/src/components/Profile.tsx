@@ -1,6 +1,7 @@
 import { useImperativeHandle, type RefObject } from 'react';
-import type { LoginUser } from '../App';
+
 import Button from './ui/Button';
+import type { LoginUser } from '../hooks/SessionContext';
 
 type Prop = {
   loginUser: LoginUser;

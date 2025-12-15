@@ -1,23 +1,25 @@
-import type { Session, LoginFunction } from '../App';
-import Login, { type LoginFocusHandler } from './Login';
+
+import Login, { type LoginHandler } from './Login';
 import Profile, { type ProfileHandler } from './Profile';
 import InputItem from './InputItem';
 import ItemList from './ItemList';
 import { useRef, type RefObject } from 'react';
+import { useSession, type LoginFunction, type Session } from '../hooks/SessionContext';
 
-type Prop = {
-    session: Session;
-    login: LoginFunction;
-    logout: () => void;
-    removeItem: (id: number) => void
-    addItem: (name: string, price: number) => void
-    modItem: (name: string, price: number) => void
-    ref: RefObject<LoginFocusHandler | null>
-};
+// type Prop = {
+//     session: Session;
+//     login: LoginFunction;
+//     logout: () => void;
+//     removeItem: (id: number) => void
+//     addItem: (name: string, price: number) => void
+//     modItem: (name: string, price: number) => void
+//     ref: RefObject<LoginHandler | null>
+// };
 
-export default function My({ session, logout, login, removeItem, addItem, modItem, ref }: Prop) {
+export default function My() {
     const profileHandlerRef = useRef<ProfileHandler>(null);
 
+    const { session, logout, login, removeItem, addItem, modItem } = useSession();
     return (
         <>
             {session?.loginUser ? (
