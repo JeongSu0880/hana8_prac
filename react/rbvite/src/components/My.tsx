@@ -1,11 +1,12 @@
 import { PlusIcon } from 'lucide-react';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { useSession } from '../hooks/SessionContext';
+import { useSession, type ItemType } from '../hooks/SessionContext';
 import Item from './Item';
 import Login from './Login';
 import Profile, { type ProfileHandler } from './Profile';
 import Button from './ui/Button';
 import { useInterval, useTimeout } from '../hooks/Interval';
+import { useFetch } from '../hooks/fetch';
 
 export default function My() {
   const { session } = useSession();
@@ -48,9 +49,21 @@ export default function My() {
   // useInterval(() => setGoodSec(s => s + 1), 1000)
   // useInterval(setGoodSec, 1000, goodSec + 1)
 
-  useTimeout(() => {
-    console.log("1초 뒤 실행");
-  }, 1000);
+  // useTimeout(() => {
+  //   console.log("1초 뒤 실행");
+  // }, 1000);
+
+  // const [data, setData] = useState<ItemType[]>([]); //초깃값 빈 배열 주면 된다 (undefined 말고)
+  // useEffect(() => {
+  //   const controller = new AbortController();
+
+  //   const { signal } = controller;
+  //   fetch('/data/sample.json', { signal }).then(res => res.json()).then(setData)
+  //   return () => controller.abort();
+  // }, []);
+
+  const { data } = useFetch('/data/sample.json');
+
 
   return (
     <>
