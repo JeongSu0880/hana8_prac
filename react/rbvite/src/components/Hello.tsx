@@ -2,11 +2,12 @@ import { useEffect, useReducer, type PropsWithChildren } from 'react';
 import { useCounter } from '../hooks/CounterContext';
 import { useSession } from '../hooks/SessionContext';
 import Button from './ui/Button';
+import { useToggle } from '../hooks/toggle';
 
 export default function Hello({ children }: PropsWithChildren) {
   const { plusCount, minusCount } = useCounter();
   //context안의 문가가 바뀌어도 리렌더링
-  const [toggler, toggle] = useReducer(p => !p, false);
+  const [toggler, toggle] = useToggle(); //커스텀 훅
   const {
     session: { loginUser },
   } = useSession();

@@ -5,6 +5,7 @@ import Item from './Item';
 import Login from './Login';
 import Profile, { type ProfileHandler } from './Profile';
 import Button from './ui/Button';
+import { useInterval, useTimeout } from '../hooks/Interval';
 
 export default function My() {
   const { session } = useSession();
@@ -19,12 +20,41 @@ export default function My() {
   const profileHandlerRef = useRef<ProfileHandler>(null);
 
   const item101 = session.cart.find((item) => item.id === 101);
-  useEffect(() => {
-    console.log('🚀 ~ item101:', item101);
-  }, [item101]);
+  // useEffect(() => {
+  //   console.log('🚀 ~ item101:', item101);
+  // }, [item101]);
+
+  const [badSec, setBadSec] = useState(0);
+  const [goodSec, setGoodSec] = useState(0);
+  // useEffect(() => {
+  //   setInterval(() => { setBadSec(s => s + 1) }, 1000)
+  // })
+
+  // useEffect(() => {
+  //   const id = setInterval(() => { setGoodSec(s => s + 1) }, 1000)
+  //   return () => clearInterval(id);
+  // }) //cleanup function
+  //언제 써야됨?
+  // timer, eventListner
+
+  //위의 useEffect는 strict 모드 때문에 2번 실행될 때 clear를 안해줘서 두개씩 증가
+  //아래는 1개씩 증가
+
+  //그럼 strict 모드를 끄면 안되나?
+  //절대 안된다. (왜?)
+
+  // 후자 useEffect 같은 경우에 매번 clean 함수를 하면 귀찮으니까 이럴때 커스텀 훅을 주로 사용
+
+  // useInterval(() => setGoodSec(s => s + 1), 1000)
+  // useInterval(setGoodSec, 1000, goodSec + 1)
+
+  useTimeout(() => {
+    console.log("1초 뒤 실행");
+  }, 1000);
 
   return (
     <>
+      <h1 className='text-2xl'>bad : {badSec}, good : {goodSec}</h1>
       {session?.loginUser ? <Profile ref={profileHandlerRef} /> : <Login />}
       <hr />
       <a
