@@ -41,9 +41,17 @@ export default function Login() {
     login(nameRef.current?.value ?? '', Number(ageRef.current?.value));
   };
 
-  useEffect(() => {
-    if (nameRef.current) nameRef.current.focus();
+
+  //비동기
+  useEffect(() => {//마운트 시점에 호출
+    alert('Login plz....')
+    nameRef.current?.focus();
+
+    return () => alert('Login success!') //언마운트 시점에 호출
   }, []);
+
+  //DOM을 가볍게 유지해야하기 위해 사용됙지 않는 돔은 언마운트를 시킴.
+  //그런데, 리액트 19에서 새로 나온 Activity는 돔을 언마운트 시키지 않음.
 
   return (
     <div className='border border-red-300 p-3 rounded-lg'>
