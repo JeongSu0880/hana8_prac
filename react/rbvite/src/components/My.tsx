@@ -1,5 +1,5 @@
 import { PlusIcon } from 'lucide-react';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useSession, type ItemType } from '../hooks/SessionContext';
 import Item from './Item';
 import Login from './Login';
@@ -62,8 +62,8 @@ export default function My() {
   //   return () => controller.abort();
   // }, []);
 
-  const { data } = useFetch('/data/sample.json');
-
+  // const totalPrice = useMemo(() => session.cart.reduce((acc, item) => acc + item.price, 0), [session.cart])
+  //값이 바뀔때만 다시 실행할거라는 뜻
 
   return (
     <>

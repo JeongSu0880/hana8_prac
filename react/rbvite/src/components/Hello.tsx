@@ -3,9 +3,10 @@ import { useCounter } from '../hooks/CounterContext';
 import { useSession } from '../hooks/SessionContext';
 import Button from './ui/Button';
 import { useToggle } from '../hooks/toggle';
+import { useFetch } from '../hooks/fetch';
 
 export default function Hello({ children }: PropsWithChildren) {
-  const { plusCount, minusCount } = useCounter();
+  const { count, plusCount, minusCount } = useCounter();
   //context안의 문가가 바뀌어도 리렌더링
   const [toggler, toggle] = useToggle(); //커스텀 훅
   const {
@@ -33,8 +34,12 @@ export default function Hello({ children }: PropsWithChildren) {
 
   //eslint가 []에 사용되는 모든 변수를 걸어주는 것을 권장함.
 
+  const { data: user, isLoading, error } = useFetch<{ username: string }>(`https://jsonplaceholder.typicode.com/users/${count + 1}`);
+
   return (
     <div className='border border-red-300 p-3 text-center'>
+      {isLoading && <h2 className='text-red-400'>Error: {error}</h2>}
+      <h2 className='text-2xl'>{isLoading ? '...' : user?.username}</h2>
       <h2 className='text-2xl'>
         Hello, {name}
         {age && <small className='text-sm'>({age})</small>}
