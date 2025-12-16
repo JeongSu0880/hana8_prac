@@ -1,6 +1,10 @@
-export const isErrorWithMessage = (err: unknown): err is
-    { message: string } => (err !== null && typeof err === 'object' && 'message' in err && typeof err.message === 'string')
-    || err instanceof Error;
+export function isString(str: unknown): str is string {
+  return typeof str === 'string';
+}
 
-
-//type predict!
+export const isErrorWithMessage = (err: unknown): err is { message: string } =>
+  err instanceof Error ||
+  (err !== null &&
+    typeof err === 'object' &&
+    'message' in err &&
+    typeof err.message === 'string');

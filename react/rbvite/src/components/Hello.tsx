@@ -1,45 +1,53 @@
-import { useEffect, useReducer, type PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 import { useCounter } from '../hooks/CounterContext';
 import { useSession } from '../hooks/SessionContext';
+import { useFetch } from '../hooks/useFetch';
+import { useToggle } from '../hooks/useToggle';
 import Button from './ui/Button';
-import { useToggle } from '../hooks/toggle';
-import { useFetch } from '../hooks/fetch';
 
 export default function Hello({ children }: PropsWithChildren) {
-  const { count, plusCount, minusCount } = useCounter();
-  //context안의 문가가 바뀌어도 리렌더링
-  const [toggler, toggle] = useToggle(); //커스텀 훅
+  const { count, plusCount } = useCounter();
+  // const [toggler, toggle] = useReducer((p) => !p, false);
+  const [toggler, toggle] = useToggle();
   const {
     session: { loginUser },
   } = useSession();
   const { name = 'Guest', age } = loginUser || {};
 
-  useEffect(() => {
-    plusCount();
-    console.log(toggler);
-    return () => minusCount();
-  }, [plusCount, minusCount])
-  //[]안의 변수가 바뀌면 계속 실행되도록 (옵저버)
-  // [](dependency array)안에는 primitive 타입은 값으로, 그렇지 않으면 주소고 변화를 감지
-  // 어떤 타입이 어떤 것을 대상으로 비교하는지 중요
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useFetch<{ username: string }>(
+    `https://jsonplaceholder.typicode.com/users/${count + 1}`,
+    [count]
+  );
 
-  //[]안에 plusCounter를 넣었을 때 왜 무한 루프?
-  //count가 계속해서 바뀌니까 계속 다시 마운트 외는 것임.
-  //그래서 방지하기 위해 plusCount와 minuCount에 useCallback를 씌어주면 됨.
-  //useCallback은 함수를 메모이제이션 하는 느낌
+  // useEffect(() => {
+  //   plusCount();
+  //   // console.log('🚀 ~ count:', toggler);
+  //   return () => minusCount();
+  // }, [plusCount, minusCount, toggler]);
+  // }, [plusCount, minusCount, count, toggler]);
 
-  // 리렌더링 -> 상태가 바뀌면 일어나는 것. (컴포넌트 안에 어떤 상태던 )
+  // (주의) 의존 관계 배열 지정 시 고려 사항 (cf. 19.2)
+  // const primitive = 123;
+  // useEffect(() => {
+  //   console.log('effect primitive 123!!!');
+  // }, [primitive]);
 
-  //왜 무거운 연산을 useEffect에 많이 넣는거야?????
-
-  //eslint가 []에 사용되는 모든 변수를 걸어주는 것을 권장함.
-
-  const { data: user, isLoading, error } = useFetch<{ username: string }>(`https://jsonplaceholder.typicode.com/users/${count + 1}`);
+  // useEffect(() => {
+  //   const array = [1, 2, 3];
+  //   console.log('effect Array!!!', array);
+  // }, []);
 
   return (
     <div className='border border-red-300 p-3 text-center'>
-      {isLoading && <h2 className='text-red-400'>Error: {error}</h2>}
-      <h2 className='text-2xl'>{isLoading ? '...' : user?.username}</h2>
+      {error && <h2 className='text-red-500'>Error: {error}</h2>}
+      <h2 className='text-2xl'>
+        {count + 1}: {isLoading ? '...' : user?.username}
+      </h2>
+      <input type='text' onChange={toggle} />
       <h2 className='text-2xl'>
         Hello, {name}
         {age && <small className='text-sm'>({age})</small>}
@@ -48,6 +56,7 @@ export default function Hello({ children }: PropsWithChildren) {
       <Button className='font-bold' onClick={plusCount}>
         count + 1
       </Button>
+      <button onClick={toggle}>Toggle</button>
     </div>
   );
 }
