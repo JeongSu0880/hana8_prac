@@ -54,18 +54,13 @@ const SessionContext = createContext<SessionContextValue>({
 
 type Action = {
   type: 'login',
-  payload: {
-    name: string,
-    age: number
-  },
+  payload: Omit<LoginUser, "id">,
   ref: RefObject<LoginHandler | null>
 } | {
   type: 'logout'
 } | {
   type: 'removeItem',
-  payload: {
-    id: number
-  }
+  payload: Pick<ItemType, "id">
 } | {
   type: 'saveItem',
   payload: {
