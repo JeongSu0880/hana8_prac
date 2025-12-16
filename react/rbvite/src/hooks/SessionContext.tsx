@@ -109,7 +109,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     const item = id && session.cart.find((item) => item.id === id);
 
     if (item) {
-      dispatch({ type: 'EDIT-ITEM', payload: { id, name, price } });
+      dispatch({ type: 'ADD-ITEM', payload: { id, name, price } });
     } else {
       const newItem = {
         id: Math.max(...session.cart.map((item) => item.id), 0) + 1,
