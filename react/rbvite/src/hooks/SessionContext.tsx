@@ -1,11 +1,10 @@
 import {
   createContext,
   use,
-  useEffect,
   useReducer,
   useRef,
   type PropsWithChildren,
-  type RefObject,
+  type RefObject
 } from 'react';
 import type { LoginHandler } from '../components/Login';
 export type ItemType = {
@@ -81,104 +80,43 @@ const reducer = (session: Session, { type, payload }: Action) => {
 };
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  // const [session, setSession] = useState<Session>(DefaultSession);
-  const [session, dispatch] = useReducer(reducer, DefaultSession);
-
-  const loginHandlerRef = useRef<LoginHandler>(null);
-
-  const logout = () => {
-    // session.loginUser = null; // fail!!
-    // setSession({ ...session, loginUser: null });
-    dispatch({ type: 'LOGOUT', payload: null });
-  };
+  const [session, dispatch] = useReducer(reducer, DefaultSession); // 초깃값 바꾸기
+  const loginHandlerRef = useRef<LoginHandler>(null)
 
   const login: LoginFunction = (name, age) => {
     if (loginHandlerRef.current?.validate())
-      dispatch({ type: 'LOGIN', payload: { id: 1, name, age } });
-    // setSession({ ...session, loginUser: { id: 1, name, age } });
-  };
+      dispatch({ type: 'LOGIN', payload: { id: 1, name, age } })
+  }
+
+  const logout = () => {
+    dispatch({ type: 'LOGOUT', payload: null })
+  }
 
   const removeItem = (id: number) => {
-    if (!confirm('Are u sure?')) return;
-
-    // setSession({
-    //   ...session,
-    //   cart: session.cart.filter((item) => item.id !== id),
-    // });
-    dispatch({ type: 'REMOVE-ITEM', payload: id });
-  };
+    dispatch({ type: 'REMOVE-ITEM', payload: id })
+  }
 
   const saveItem = ({ id, name, price }: ItemType) => {
-    const item = id && session.cart.find((item) => item.id === id);
-
-    // updateItem
-    // session.cart.map(item => item.id === id ? { id: item.id, name, price } : item);
+    //아이디가 없다면 ADD이지만, 있다고 해서 무조건 EDIT은 아님. (값이 어떻게 조작되었을지 모르니까)
+    const item = (id && session.cart.find((item) => item.id === id))
 
     if (item) {
-      // item.name = name;
-      // item.price = price;
-      // setSession({
-      //   ...session,
-      //   cart: session.cart.map((item) =>
-      //     item.id === id ? { id, name, price } : item
-      //   ),
-      // });
-      dispatch({ type: 'EDIT-ITEM', payload: { id, name, price } });
+      dispatch({ type: 'EDIT-ITEM', payload: { id, name, price } })
     } else {
       const newItem = {
-        id: Math.max(...session.cart.map((item) => item.id), 0) + 1,
+        id: Math.max(...session.cart.map((item) => item.id)) + 1,
         name,
-        price,
-      };
-      // setSession({ ...session, cart: [...session.cart, newItem] });
-      dispatch({ type: 'ADD-ITEM', payload: newItem });
+        price
+      }
+      dispatch({ type: 'ADD-ITEM', payload: newItem })
     }
-  };
-
-  const loadCartFromStorage = () => {
-    const cart = localStorage.getItem('cart');
-    const expiredAt = localStorage.getItem('cartExpiredAt');
-
-    if (!cart || !expiredAt) return null;
-
-    if (Date.now() > Number(expiredAt)) {
-      localStorage.removeItem('cart');
-      localStorage.removeItem('cartExpiredAt');
-      return null;
-    }
-
-    return JSON.parse(cart);
-  };
-
-  useEffect(() => {
-    const cartFromStorage = loadCartFromStorage();
-
-    if (!cartFromStorage) {
-      fetch('/data/sample.json')
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem('cart', JSON.stringify(data))
-        });
-    }
-  }, []);
-
-  const DAY = 24 * 60 * 60 * 1000;
-
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(session.cart));
-    localStorage.setItem(
-      'cartExpiredAt',
-      String(Date.now() + 7 * DAY)
-    );
-  }, [session.cart]);
+  }
 
   return (
-    <SessionContext.Provider
-      value={{ session, login, logout, loginHandlerRef, removeItem, saveItem }}
-    >
+    <SessionContext.Provider value={{ login, logout, removeItem, saveItem, session, loginHandlerRef }}>
       {children}
     </SessionContext.Provider>
-  );
+  )
 }
 
 export const useSession = () => use(SessionContext);

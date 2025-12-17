@@ -1,8 +1,7 @@
-import { Loader2Icon, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import { useDeferredValue, useEffect, useMemo, useReducer, useRef, useState, useTransition, type ChangeEvent } from 'react';
-import { useDebounce, useInterval, useThrottle } from '../hooks/useTimer';
+import { useInterval, useThrottle } from '../hooks/useTimer';
 import { useSession, type ItemType } from '../hooks/SessionContext';
-import { useFetch } from '../hooks/useFetch';
 import Item from './Item';
 import Login from './Login';
 import Profile, { type ProfileHandler } from './Profile';
@@ -70,7 +69,7 @@ export default function My() {
 
   //   return () => controller.abort();
   // }, []);
-  const { data } = useFetch<ItemType[]>('/data/sample.json');
+  // const { data } = useFetch<ItemType[]>('/data/sample.json');
 
   const totalPrice = useMemo(
     () => session.cart.reduce((acc, item) => acc + item.price, 0),
@@ -96,7 +95,7 @@ export default function My() {
     startSearchTransition(async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000))// a그냥 일단 뭔가 기다리기 위함 코드 
       setSearchStr(e.target.value)
-    })//trasision은 저 promise의 콜백함수가 실행되기 직전에 isSearching을 true 바꿔주고 끝나면 다시 false로
+    })//trasition은 저 promise의 콜백함수가 실행되기 직전에 isSearching을 true 바꿔주고 끝나면 다시 false로
   }
 
   return (
@@ -126,7 +125,11 @@ export default function My() {
         onChange={(e) => handleSearch}
       />
       <ul>
+        {/* 
         {(session.cart.length ? session.cart : data)
+          ?.filter((item) => item.name.includes(debouncedSearchStr)) */}
+
+        {(session.cart)
           ?.filter((item) => item.name.includes(debouncedSearchStr))
           .map((item) => (
             <li key={item.id}>
@@ -145,8 +148,7 @@ export default function My() {
             </Button>
           )}
         </li>
-      </ul>
+      </ul >
     </>
   );
 }
-// d

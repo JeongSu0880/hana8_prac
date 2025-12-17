@@ -48,10 +48,20 @@ export default function Login() {
     return () => alert('Login success!!');
   }, []);
 
+  const loginAction = (formData: FormData) => {
+    // const formObj = 
+  }
+
   return (
     <div className='border border-red-300 p-3 rounded-lg'>
       <h1 className='text-2xl text-center font-medium'>Login</h1>
       <form onSubmit={makeLogin} className='space-y-3'>
+        <input name='' />
+        <Button>
+          LoginAction
+        </Button>
+      </form>
+      <form action={loginAction} className='space-y-3'>
         <LabelInput label='Name' ref={nameRef} />
         <LabelInput
           type='number'
