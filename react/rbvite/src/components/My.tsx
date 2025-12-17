@@ -1,12 +1,13 @@
 import { PlusIcon } from 'lucide-react';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useInterval } from '../hooks/interval';
-import { ItemType, useSession } from '../hooks/SessionContext';
+import { useDebounce, useInterval, useThrottle } from '../hooks/useTimer';
+import { useSession, type ItemType } from '../hooks/SessionContext';
 import { useFetch } from '../hooks/useFetch';
 import Item from './Item';
 import Login from './Login';
 import Profile, { type ProfileHandler } from './Profile';
 import Button from './ui/Button';
+import LabelInput from './ui/LabelInput';
 
 export default function My() {
   const { session } = useSession();
@@ -76,6 +77,18 @@ export default function My() {
     [session.cart]
   );
 
+  const [searchStr, setSearchStr] = useState('');
+  // const debouncedSearchStr = useDebounce(searchStr, 500);
+  const debouncedSearchStr = useThrottle(searchStr, 500);
+  // const searchRef = useRef<HTMLInputElement>(null);
+  // const [searchStr, setSearchStr] = useState('') //타입 정의 해야돼?
+  // const findItemWithName = (name: string) => {
+  //   if (session.cart.map((item) => item.name === name))
+  //   setSearchStr(session.cart.filter((item) => item.name.startsWith(name)))
+  // }
+  //useMemo를 써야하는가?
+  //str ?? '' 이렇게 쓰면 ''일 때 뭐가 찾아지나?
+
   return (
     <>
       <h1 className='text-xl'>
@@ -98,12 +111,18 @@ export default function My() {
         {item101?.name}
       </a>
       <h2 className='text-xl'>Tot: {totalPrice.toLocaleString()}원</h2>
+      <LabelInput
+        label='search'
+        onChange={(e) => setSearchStr(e.target.value)}
+      />
       <ul>
-        {(session.cart.length ? session.cart : data)?.map((item) => (
-          <li key={item.id}>
-            <Item item={item} />
-          </li>
-        ))}
+        {(session.cart.length ? session.cart : data)
+          ?.filter((item) => item.name.includes(debouncedSearchStr))
+          .map((item) => (
+            <li key={item.id}>
+              <Item item={item} />
+            </li>
+          ))}
         <li className='text-center'>
           {isAdding ? (
             <Item
@@ -120,3 +139,4 @@ export default function My() {
     </>
   );
 }
+// d
