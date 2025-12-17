@@ -11,7 +11,7 @@ import {
   type ChangeEvent,
 } from 'react';
 import { useFormStatus } from 'react-dom';
-import { ItemType, useSession } from '../hooks/SessionContext';
+import { type ItemType, useSession } from '../hooks/SessionContext';
 import { useInterval, useThrottle } from '../hooks/useTimer';
 import Item from './Item';
 import Login from './Login';
