@@ -1,6 +1,7 @@
 import {
   createContext,
   use,
+  useEffect,
   useReducer,
   useRef,
   type PropsWithChildren,
@@ -40,11 +41,11 @@ type SessionContextValue = {
 };
 const SessionContext = createContext<SessionContextValue>({
   session: DefaultSession,
-  login: () => {},
-  logout: () => {},
+  login: () => { },
+  logout: () => { },
   loginHandlerRef: null,
-  removeItem: () => {},
-  saveItem: () => {},
+  removeItem: () => { },
+  saveItem: () => { },
 });
 
 type Action =
@@ -133,6 +134,43 @@ export function SessionProvider({ children }: PropsWithChildren) {
       dispatch({ type: 'ADD-ITEM', payload: newItem });
     }
   };
+
+  const loadCartFromStorage = () => {
+    const cart = localStorage.getItem('cart');
+    const expiredAt = localStorage.getItem('cartExpiredAt');
+
+    if (!cart || !expiredAt) return null;
+
+    if (Date.now() > Number(expiredAt)) {
+      localStorage.removeItem('cart');
+      localStorage.removeItem('cartExpiredAt');
+      return null;
+    }
+
+    return JSON.parse(cart);
+  };
+
+  useEffect(() => {
+    const cartFromStorage = loadCartFromStorage();
+
+    if (!cartFromStorage) {
+      fetch('/data/sample.json')
+        .then(res => res.json())
+        .then(data => {
+          localStorage.setItem('cart', JSON.stringify(data))
+        });
+    }
+  }, []);
+
+  const DAY = 24 * 60 * 60 * 1000;
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(session.cart));
+    localStorage.setItem(
+      'cartExpiredAt',
+      String(Date.now() + 7 * DAY)
+    );
+  }, [session.cart]);
 
   return (
     <SessionContext.Provider

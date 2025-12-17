@@ -93,9 +93,9 @@ export default function My() {
 
   const [isSearching, startSearchTransition] = useTransition();
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    startSearchTransition( async() => {
+    startSearchTransition(async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000))// a그냥 일단 뭔가 기다리기 위함 코드 
-      setSearchStr(e.target.value) 
+      setSearchStr(e.target.value)
     })//trasision은 저 promise의 콜백함수가 실행되기 직전에 isSearching을 true 바꿔주고 끝나면 다시 false로
   }
 
