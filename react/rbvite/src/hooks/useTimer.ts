@@ -170,3 +170,7 @@ export function useThrottle<T>(state: T, delay: number, deps: unknown[] = []) {
 }//단위시간동안 한번은 실행이 되도록
 //1. 왜 검색할 때 애초에 debounce와 throttle을 사용하는지?
 //2. useEffect를 왜 사용하는지,,,
+
+
+// useRef를 사용한 이유?
+// useDeferredValue

@@ -1,5 +1,5 @@
-import { PlusIcon } from 'lucide-react';
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { Loader2Icon, PlusIcon } from 'lucide-react';
+import { useDeferredValue, useEffect, useMemo, useReducer, useRef, useState, useTransition, type ChangeEvent } from 'react';
 import { useDebounce, useInterval, useThrottle } from '../hooks/useTimer';
 import { useSession, type ItemType } from '../hooks/SessionContext';
 import { useFetch } from '../hooks/useFetch';
@@ -89,6 +89,16 @@ export default function My() {
   //useMemo를 써야하는가?
   //str ?? '' 이렇게 쓰면 ''일 때 뭐가 찾아지나?
 
+  const deferredStr = useDeferredValue(searchStr, 'xxx')
+
+  const [isSearching, startSearchTransition] = useTransition();
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    startSearchTransition( async() => {
+      await new Promise((resolve) => setTimeout(resolve, 2000))// a그냥 일단 뭔가 기다리기 위함 코드 
+      setSearchStr(e.target.value) 
+    })//trasision은 저 promise의 콜백함수가 실행되기 직전에 isSearching을 true 바꿔주고 끝나면 다시 false로
+  }
+
   return (
     <>
       <h1 className='text-xl'>
@@ -113,7 +123,7 @@ export default function My() {
       <h2 className='text-xl'>Tot: {totalPrice.toLocaleString()}원</h2>
       <LabelInput
         label='search'
-        onChange={(e) => setSearchStr(e.target.value)}
+        onChange={(e) => handleSearch}
       />
       <ul>
         {(session.cart.length ? session.cart : data)
