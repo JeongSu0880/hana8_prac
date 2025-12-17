@@ -1,12 +1,24 @@
 import { PlusIcon } from 'lucide-react';
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useInterval } from '../hooks/interval';
+import {
+  useActionState,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  useTransition,
+  type ChangeEvent,
+} from 'react';
+import { useFormStatus } from 'react-dom';
 import { ItemType, useSession } from '../hooks/SessionContext';
-import { useFetch } from '../hooks/useFetch';
+import { useInterval, useThrottle } from '../hooks/useTimer';
 import Item from './Item';
 import Login from './Login';
 import Profile, { type ProfileHandler } from './Profile';
 import Button from './ui/Button';
+import LabelInput from './ui/LabelInput';
+import Spinner from './ui/Spinner';
 
 export default function My() {
   const { session } = useSession();
@@ -47,14 +59,16 @@ export default function My() {
 
   // const f = () => setGoodSec((p) => p + 1);
 
-  const ff = (n: number) => {
-    console.log('🚀 ~ n:', n, goodSec); // n은 영원히 1 (: )
+  // const ff = (n: number) => {
+  const ff = () => {
+    // console.log('🚀 ~ n:', n, goodSec); // n은 영원히 1 (: )
     // setGoodSec(n + 1); // 위 goodSec는 영원히 0
     setGoodSec((p) => p + 1);
   };
   // goodSec + 1 의 값이
   // console.log('🚀 ~ goodSec:', goodSec);
-  const { reset, clear } = useInterval(ff, 1000, goodSec + 1);
+  // const { reset, clear } = useInterval(ff, 1000, goodSec + 1);
+  const { reset, clear } = useInterval(ff, 1000);
   // useInterval(setGoodSec, 1000, goodSec + 1);
   // useInterval(() => setGoodSec((p) => p + 1), 1000);
   // useInterval(f, 1000);
@@ -69,11 +83,40 @@ export default function My() {
 
   //   return () => controller.abort();
   // }, []);
-  const { data } = useFetch<ItemType[]>('/data/sample.json');
 
   const totalPrice = useMemo(
     () => session.cart.reduce((acc, item) => acc + item.price, 0),
     [session.cart]
+  );
+
+  const [searchStr, setSearchStr] = useState('');
+  // const debouncedSearchStr = useDebounce(searchStr, 500);
+  const debouncedSearchStr = useThrottle(searchStr, 500);
+
+  const deferredStr = useDeferredValue(searchStr, 'xxx');
+  // useEffect(() => {
+  //   clearTimeout(searchStr);
+  // }, [deferredStr]);
+
+  const [searchResult, setSearchResult] = useState<ItemType[]>([]);
+  const [isSearching, startSearchTransition] = useTransition();
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    startSearchTransition(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const str = e.target.value;
+      setSearchStr(str);
+      setSearchResult(session.cart.filter((item) => item.name.includes(str)));
+    });
+  };
+
+  const [results, search, isPending] = useActionState(
+    async (preResults: ItemType[], formData: FormData) => {
+      const str = formData.get('ActionState') as string;
+      console.log('******', preResults, str);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      return session.cart.filter((item) => item.name.includes(str));
+    },
+    []
   );
 
   return (
@@ -98,12 +141,42 @@ export default function My() {
         {item101?.name}
       </a>
       <h2 className='text-xl'>Tot: {totalPrice.toLocaleString()}원</h2>
+
+      {isPending ? (
+        <Spinner />
+      ) : (
+        <div>SR_ActionState :{results.map((item) => item.name).join()}</div>
+      )}
+
+      <div>SR_Transition: {searchResult.map((item) => item.name).join()}</div>
+      {isSearching ? (
+        <Spinner />
+      ) : (
+        <h2 className='text-xl text-red-500'>
+          {searchStr} : {deferredStr} : {debouncedSearchStr}
+        </h2>
+      )}
+
+      {/* <form action={search}> */}
+      <form className='flex gap-2'>
+        <LabelInput label='ActionState' autoComplete='off' />
+        <button formAction={search}>Action</button>
+        <SearchButton />
+      </form>
+
+      <LabelInput
+        label='Transition'
+        onChange={handleSearch}
+        autoComplete='off'
+      />
       <ul>
-        {(session.cart.length ? session.cart : data)?.map((item) => (
-          <li key={item.id}>
-            <Item item={item} />
-          </li>
-        ))}
+        {session.cart
+          ?.filter((item) => item.name.includes(debouncedSearchStr))
+          .map((item) => (
+            <li key={item.id}>
+              <Item item={item} />
+            </li>
+          ))}
         <li className='text-center'>
           {isAdding ? (
             <Item
@@ -119,4 +192,10 @@ export default function My() {
       </ul>
     </>
   );
+}
+
+function SearchButton() {
+  const { pending, data } = useFormStatus();
+  if (data) console.log('ddddddd>>', data, pending);
+  return <button disabled={pending}>SearchButton</button>;
 }
