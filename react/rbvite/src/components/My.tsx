@@ -120,25 +120,26 @@ export default function My() {
     },
     []
   );
-
-  type UserInfo = {
-    userId: number
-    id: number,
-    title: string,
-    body: string
-  }
-
-  const [list, getUserList, isLoading] = useActionState(
-    async (preUser: UserInfo[], formData: FormData) => {
-      let list;
-      const userId = Number(formData.get('userId'))
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      const userInfo = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
-        .then((res) => res.json())
-      return userInfo
-    }, []
-  )
+  /* my poor answer
+    type UserInfo = {
+      userId: number
+      id: number,
+      title: string,
+      body: string
+    }
+  
+    const [list, getUserList, isLoading] = useActionState(
+      async (preUser: UserInfo[], formData: FormData) => {
+        let list;
+        const userId = Number(formData.get('userId'))
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        const userInfo = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+          .then((res) => res.json())
+        return userInfo
+      }, []
+    )*/
   // useActionState()
+
 
   return (
     <>
@@ -177,7 +178,7 @@ export default function My() {
           {searchStr} : {deferredStr} : {debouncedSearchStr}
         </h2>
       )}
-      <form action={getUserList}>
+      {/* <form action={getUserList}>
         <LabelInput placeholder='userId...' label='userId'></LabelInput>
         {isLoading ?
           <>
@@ -189,7 +190,7 @@ export default function My() {
             {JSON.stringify(list)}
           </>
         }
-      </form>
+      </form> */}
 
       {/* <form action={search}> */}
       <form className='flex gap-2'>
