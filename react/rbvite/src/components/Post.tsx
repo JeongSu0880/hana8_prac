@@ -1,4 +1,4 @@
-import { useActionState, useOptimistic } from 'react';
+import { useActionState, useOptimistic, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import Spinner from './ui/Spinner';
 
@@ -8,21 +8,35 @@ const searchPost = (userId: string): Promise<Post[]> => // 만약 여기서 리�
         .then((res) => res.json())
 export default function Posts() {
     const [state, setState] = useState('')
-    const [optiState, setOptiState] = useOptimistic(state)
-    const [posts, search, isPending] = useActionState<Post[], FormData>(
-        async (_posts, formData) => {
-            const userId = formData.get('userId') as string
-            setState(userId) // 이게 바로 바뀌지 않을 것임. 왜냐?> searchPost만 비동기 임에도 action이 한 transition으로 단위로 처리한다는 것. 그래서 그 단위 동작이 다 끝날때까지 state가 바뀌지 않음. 그럼 어뜨카냐?
-            setOptiState(userId) // 그래서 ㅓ존재하는게 useOptimistic임. 바로 바뀔 수 있어. !
+    // const [optiState, setOptiState] = useOptimistic(state)
+    // const [posts, search, isPending] = useActionState<Post[], FormData>(
+    //     async (_posts, formData) => {
+    //         const userId = formData.get('userId') as string
+    //         setState(userId) // 이게 바로 바뀌지 않을 것임. 왜냐?> searchPost만 비동기 임에도 action이 한 transition으로 단위로 처리한다는 것. 그래서 그 단위 동작이 다 끝날때까지 state가 바뀌지 않음. 그럼 어뜨카냐?
+    //         setOptiState(userId) // 그래서 ㅓ존재하는게 useOptimistic임. 바로 바뀔 수 있어. !
 
-            // 한 transition이라는 것은 취소 가능한 단위를 말하는 것이기도 함. 에러가 나면 취소할 수 잇어! -> 그럼 만약에 여기서 fetch가 실패하면 react에서 알아서 화면을 돌려 (?) 주나?
-            return searchPost(userId)
-        }, []) // 여기서 ! searchPost의 반환값도 promise일텐데 await을 안해줘도 되는 이유? react transition안에서 이걸 다 처리해서 상태에 넣어준다 (?) 완전 맞는 설명인지는 모르겠음.
+    //         // 한 transition이라는 것은 취소 가능한 단위를 말하는 것이기도 함. 에러가 나면 취소할 수 잇어! -> 그럼 만약에 여기서 fetch가 실패하면 react에서 알아서 화면을 돌려 (?) 주나?
+    //         return searchPost(userId)
+    //     }, []) // 여기서 ! searchPost의 반환값도 promise일텐데 await을 안해줘도 되는 이유? react transition안에서 이걸 다 처리해서 상태에 넣어준다 (?) 완전 맞는 설명인지는 모르겠음.
+
+    const [posts, setPosts] = useState<Post[]>([])
+    const [isPending, setPending] = useState(false)
+    const outTransition = async (userId: string) => {
+        if (!userId) return
+        setState(userId)
+        setPending(true)
+        const posts = await searchPost(userId)
+        setPending(false)
+        setPosts(posts)
+    }
+
+    // 만약에 useActionState를 쓰지 않는다면 
     return (
         <div>
             <h1>Posts</h1>
-            <form action={search}>
-                <input type='text' name='userId' placeholder='useId...' />
+            {/* <form action={search}> */}
+            <form>
+                <input onChange={(e) => outTransition(e.target.value)} type='text' name='userId' placeholder='useId...' />
                 <SearchButton label='Search' inpName='userId' />
             </form>
             {isPending ? <Spinner /> :
