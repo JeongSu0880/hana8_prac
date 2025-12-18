@@ -3,7 +3,8 @@ import { useCounter } from '../hooks/CounterContext';
 import { useSession } from '../hooks/SessionContext';
 import { useFetch } from '../hooks/useFetch';
 import { useToggle } from '../hooks/useToggle';
-import Button from './ui/Button';
+import Btn from './ui/Btn';
+import { Button } from './ui/button';
 
 export default function Hello({ children }: PropsWithChildren) {
   const { count, plusCount } = useCounter();
@@ -49,6 +50,7 @@ export default function Hello({ children }: PropsWithChildren) {
   //t가 deps에 없지만 useEffectEvent에 감싸져 있으므로 lint에서 경고를 안 내보냄
   // react 19부터 있는 것
 
+
   return (
     <div className='border border-red-300 p-3 text-center'>
       {error && <h2 className='text-red-500'>Error: {error}</h2>}
@@ -61,9 +63,10 @@ export default function Hello({ children }: PropsWithChildren) {
         {age && <small className='text-sm'>({age})</small>}
       </h2>
       <div>{children}</div>
-      <Button className='font-bold' onClick={plusCount}>
+      <Btn className='font-bold' onClick={plusCount}>
         count + 1
-      </Button>
+      </Btn>
+      <Button variant={'destructive'}>ShadCnButton</Button>
       <button onClick={toggle}>Toggle</button>
     </div>
   );
