@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { useEffect, useEffectEvent, type PropsWithChildren } from 'react';
 import { useCounter } from '../hooks/CounterContext';
 import { useSession } from '../hooks/SessionContext';
 import { useFetch } from '../hooks/useFetch';
@@ -8,7 +8,7 @@ import Button from './ui/Button';
 export default function Hello({ children }: PropsWithChildren) {
   const { count, plusCount } = useCounter();
   // const [toggler, toggle] = useReducer((p) => !p, false);
-  const [, toggle] = useToggle();
+  const [tog, toggle] = useToggle();
   const {
     session: { loginUser },
   } = useSession();
@@ -40,12 +40,20 @@ export default function Hello({ children }: PropsWithChildren) {
   //   const array = [1, 2, 3];
   //   console.log('effect Array!!!', array);
   // }, []);
+  const t = useEffectEvent(() => console.log('effect tog', tog))
+  useEffect(() => {
+    console.log('effect! count', count)
+    t()
+  }, [count])
+
+  //t가 deps에 없지만 useEffectEvent에 감싸져 있으므로 lint에서 경고를 안 내보냄
+  // react 19부터 있는 것
 
   return (
     <div className='border border-red-300 p-3 text-center'>
       {error && <h2 className='text-red-500'>Error: {error}</h2>}
       <h2 className='text-2xl'>
-        {count + 1}: {isLoading ? '...' : user?.username}
+        {count + 1}: {tog ? 'T' : 'F'} {isLoading ? '...' : user?.username}
       </h2>
       <input type='text' onChange={toggle} />
       <h2 className='text-2xl'>
