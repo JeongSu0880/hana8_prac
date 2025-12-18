@@ -22,6 +22,7 @@ import LabelInput from './ui/LabelInput';
 import Spinner from './ui/Spinner';
 import { useFetch } from '../hooks/useFetch';
 import Posts from './Post';
+import { Button } from './ui/button';
 
 export default function My() {
   const { session } = useSession();
@@ -233,5 +234,5 @@ export default function My() {
 function SearchButton() {
   const { pending, data } = useFormStatus();
   if (data) console.log('ddddddd>>', data, pending);
-  return <button disabled={pending}>SearchButton</button>;
+  return <Button disabled={pending}>SearchButton</Button>;
 }

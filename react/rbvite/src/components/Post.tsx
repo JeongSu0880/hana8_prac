@@ -1,6 +1,7 @@
 import { useActionState, useOptimistic, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import Spinner from './ui/Spinner';
+import { Button } from './ui/button';
 
 type Post = { id: number; title: string, userId: number }
 const searchPost = (userId: string): Promise<Post[]> => // 만약 여기서 리턴타입을 안줬다?????? 그럼 any가 된다. (any를 보면 타입을 잡아야하는거누나!)
@@ -44,7 +45,12 @@ export default function Posts() {
             </form>
             {isPending ? <Spinner /> :
                 <ul>
-                    {posts.map(({ id, title }) => <li key={id}>{id}. {title}</li>)}
+                    {posts.map(({ id, title }) => <li key={id}>
+                        {/* <Alerter title={title} description={body}>
+                            <Button>ㄴㅁㅇㄻㄴㅇㄹ</Button>
+                        </Alerter> */}
+
+                    </li>)}
                 </ul>
             }
         </div>
