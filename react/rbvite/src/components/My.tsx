@@ -1,5 +1,6 @@
 import { PlusIcon } from 'lucide-react';
 import {
+  use,
   useActionState,
   useDeferredValue,
   useEffect,
@@ -19,6 +20,7 @@ import Profile, { type ProfileHandler } from './Profile';
 import Button from './ui/Button';
 import LabelInput from './ui/LabelInput';
 import Spinner from './ui/Spinner';
+import { useFetch } from '../hooks/useFetch';
 
 export default function My() {
   const { session } = useSession();
@@ -119,6 +121,25 @@ export default function My() {
     []
   );
 
+  type UserInfo = {
+    userId: number
+    id: number,
+    title: string,
+    body: string
+  }
+
+  const [list, getUserList, isLoading] = useActionState(
+    async (preUser: UserInfo[], formData: FormData) => {
+      let list;
+      const userId = Number(formData.get('userId'))
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const userInfo = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+        .then((res) => res.json())
+      return userInfo
+    }, []
+  )
+  // useActionState()
+
   return (
     <>
       <h1 className='text-xl'>
@@ -156,6 +177,19 @@ export default function My() {
           {searchStr} : {deferredStr} : {debouncedSearchStr}
         </h2>
       )}
+      <form action={getUserList}>
+        <LabelInput placeholder='userId...' label='userId'></LabelInput>
+        {isLoading ?
+          <>
+            searching...
+            <Button disabled={true}>searching...</Button>
+          </> :
+          <>
+            <Button>search</Button>
+            {JSON.stringify(list)}
+          </>
+        }
+      </form>
 
       {/* <form action={search}> */}
       <form className='flex gap-2'>
