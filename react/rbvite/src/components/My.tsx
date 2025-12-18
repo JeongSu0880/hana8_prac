@@ -21,6 +21,7 @@ import Button from './ui/Button';
 import LabelInput from './ui/LabelInput';
 import Spinner from './ui/Spinner';
 import { useFetch } from '../hooks/useFetch';
+import Posts from './Post';
 
 export default function My() {
   const { session } = useSession();
@@ -163,7 +164,7 @@ export default function My() {
         {item101?.name}
       </a>
       <h2 className='text-xl'>Tot: {totalPrice.toLocaleString()}원</h2>
-
+      <Posts />
       {isPending ? (
         <Spinner />
       ) : (
