@@ -1,26 +1,20 @@
+import { useSession, type ItemType } from '@/hooks/SessionContext';
 import { FilePlus2Icon, RotateCcwIcon, SaveIcon } from 'lucide-react';
-import LabelInput from './ui/LabelInput';
-import Btn from './ui/Btn';
 import { useRef, useState, type FormEvent, type RefObject } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useSession } from '@/hooks/SessionContext';
+import { Navigate, useNavigate, useOutletContext } from 'react-router-dom';
+import Btn from './ui/Btn';
+import LabelInput from './ui/LabelInput';
 
 export default function ItemEdit() {
-    const {
-        session: { cart },
-    } = useSession();
-    const params = useParams<{ id: string }>();
-    const id = Number(params.id)
-    console.log('🚀 ~ id:', id);
+    const item = useOutletContext<ItemType>();
     const navigate = useNavigate();
 
     const { saveItem } = useSession();
-    const [isEditing, setEditing] = useState(!id);
+    const [isEditing, setEditing] = useState(!item.id);
     const [hasDirty, setDirty] = useState(false);
     const nameRef = useRef<HTMLInputElement>(null);
     const priceRef = useRef<HTMLInputElement>(null);
 
-    const item = cart.find((item) => item.id === Number(id));
     if (!item) return <Navigate to={'/items'} />;
 
     const checkDirty = () => {
@@ -98,6 +92,7 @@ export default function ItemEdit() {
                 }} type='reset' className=''>
                     <RotateCcwIcon />
                 </Btn>
+                {/* <Button ><Trash2Icon /></Button> */}
                 {hasDirty && (
                     <Btn onClick={() => { navigate(`/items`) }} type='submit' className='text-blue-500' disabled={!hasDirty}>
                         {item.id ? <SaveIcon /> : <FilePlus2Icon />}

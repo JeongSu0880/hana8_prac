@@ -6,11 +6,13 @@ type Prop = {
   type?: 'reset' | 'submit';
   disabled?: boolean;
   className?: string;
+  variant?: 'default' | 'destructive' | 'primary'
 };
 
 export default function Btn({
   onClick,
   type,
+  variant = 'default',
   className,
   disabled,
   children,
@@ -18,7 +20,10 @@ export default function Btn({
   return (
     <button
       type={type}
-      className={cn(
+      className={cn({
+        'bg-red-500 text-white': variant === 'destructive',
+        'bg-primary-foreground': variant === 'primary'
+      },
         `hover:bg-gray-100 border py-1 px-2 rounded-md cursor-pointer ${className}`
       )}
       onClick={onClick}
