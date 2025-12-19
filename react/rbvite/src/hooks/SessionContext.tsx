@@ -48,11 +48,11 @@ type SessionContextValue = {
 };
 const SessionContext = createContext<SessionContextValue>({
   session: { loginUser: null, cart: [] },
-  login: () => {},
-  logout: () => {},
+  login: () => { },
+  logout: () => { },
   loginHandlerRef: null,
-  removeItem: () => {},
-  saveItem: () => {},
+  removeItem: () => { },
+  saveItem: () => { },
 });
 
 type Action =

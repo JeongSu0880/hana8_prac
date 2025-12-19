@@ -2,7 +2,7 @@ import { FilePlus2Icon, RotateCcwIcon, SaveIcon } from 'lucide-react';
 import LabelInput from './ui/LabelInput';
 import Btn from './ui/Btn';
 import { useRef, useState, type FormEvent, type RefObject } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useSession } from '@/hooks/SessionContext';
 
 export default function ItemEdit() {
@@ -12,6 +12,7 @@ export default function ItemEdit() {
     const params = useParams<{ id: string }>();
     const id = Number(params.id)
     console.log('🚀 ~ id:', id);
+    const navigate = useNavigate();
 
     const { saveItem } = useSession();
     const [isEditing, setEditing] = useState(!id);
@@ -91,19 +92,23 @@ export default function ItemEdit() {
                     onChange={checkDirty}
                     placeholder='price...'
                 />
-                <Link to={`../`}>
-                    <Btn onClick={cancelEdit} type='reset' className=''>
-                        <RotateCcwIcon />
-                    </Btn>
-                </Link>
+                <Btn onClick={() => {
+                    cancelEdit()
+                    navigate(-1)
+                }} type='reset' className=''>
+                    <RotateCcwIcon />
+                </Btn>
                 {hasDirty && (
-                    <Link to={`../`}>
-                        <Btn type='submit' className='text-blue-500' disabled={!hasDirty}>
-                            {item.id ? <SaveIcon /> : <FilePlus2Icon />}
-                        </Btn>
-                    </Link>
+                    <Btn onClick={() => { navigate(`/items`) }} type='submit' className='text-blue-500' disabled={!hasDirty}>
+                        {item.id ? <SaveIcon /> : <FilePlus2Icon />}
+                    </Btn>
                 )}
             </form>
         </>
     )
 }
+
+// 기존의 문제점
+// 버튼 컴포넌트을 링크 컴포넌트로 감싸면 링크 혹은 버튼의 onclick이벤트가 씹힐 수 잇다.
+// 그래서 submit을 하는 버튼을 눌러보 url은 잘 바뀌는데 상품 수정이 안 되었던 것!
+// useNavigate()를 쓰자
