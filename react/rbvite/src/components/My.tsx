@@ -1,6 +1,4 @@
-import { PlusIcon } from 'lucide-react';
 import {
-  use,
   useActionState,
   useDeferredValue,
   useEffect,
@@ -9,98 +7,27 @@ import {
   useRef,
   useState,
   useTransition,
-  type ChangeEvent,
+  type ChangeEvent
 } from 'react';
 import { useFormStatus } from 'react-dom';
-import { type ItemType, useSession } from '../hooks/SessionContext';
+import { useSession, type ItemType } from '../hooks/SessionContext';
 import { useInterval, useThrottle } from '../hooks/useTimer';
-import Item from './Item';
-import Login from './Login';
-import Profile, { type ProfileHandler } from './Profile';
-import Btn from './ui/Btn';
-import LabelInput from './ui/LabelInput';
-import Spinner from './ui/Spinner';
-import { useFetch } from '../hooks/useFetch';
-import Posts from './Post';
+import { type ProfileHandler } from './Profile';
 import { Button } from './ui/button';
+import LabelInput from './ui/LabelInput';
 
 export default function My() {
-  const { session } = useSession();
-  // const [isAdding, setAdding] = useState(false);
-  // const toggleAdding = () => setAdding((pre) => !pre);
   const [isAdding, toggleAdding] = useReducer((pre) => !pre, false);
-  // const [totalPrice, addPrice] = useReducer((pre, action) => pre + action, 0);
-  // addPrice(1000)
-  /*
-  function useReducer(reducer, initValueOrFunction) {
-    const [state, setState] = useState(initValueOrFunction);
-    const dispatch = (action) => {
-      setState(reducer(preState, action));
-    };
-
-    return [state, dispatch];
-  }
-  */
 
   const profileHandlerRef = useRef<ProfileHandler>(null);
 
-  const item101 = session.cart.find((item) => item.id === 101);
-  // useEffect(() => {
-  //   console.log('🚀 ~ item101:', item101);
-  // }, [item101]);
+  // const item101 = session.cart.find((item) => item.id === 101);
 
-  const [badSec, setBadSec] = useState(0);
-  const [goodSec, setGoodSec] = useState(0);
-
-  useEffect(() => {
-    setInterval(() => setBadSec((p) => p + 1), 1000);
-  }, []);
-
-  // useEffect(() => {
-  //   const intl = setInterval(() => setGoodSec((p) => p + 1), 1000);
-  //   return () => clearInterval(intl);
-  // }, []);
-
-  // const f = () => setGoodSec((p) => p + 1);
-
-  // const ff = (n: number) => {
-  const ff = () => {
-    // console.log('🚀 ~ n:', n, goodSec); // n은 영원히 1 (: )
-    // setGoodSec(n + 1); // 위 goodSec는 영원히 0
-    setGoodSec((p) => p + 1);
-  };
-  // goodSec + 1 의 값이
-  // console.log('🚀 ~ goodSec:', goodSec);
-  // const { reset, clear } = useInterval(ff, 1000, goodSec + 1);
-  const { reset, clear } = useInterval(ff, 1000);
-  // useInterval(setGoodSec, 1000, goodSec + 1);
-  // useInterval(() => setGoodSec((p) => p + 1), 1000);
-  // useInterval(f, 1000);
-
-  // const [data, setData] = useState<ItemType[]>([]);
-  // useLayoutEffect(() => {
-  //   const controller = new AbortController();
-  //   const { signal } = controller;
-  //   fetch('/data/sample.json', { signal })
-  //     .then((res) => res.json())
-  //     .then(setData);
-
-  //   return () => controller.abort();
-  // }, []);
-
-  const totalPrice = useMemo(
-    () => session.cart.reduce((acc, item) => acc + item.price, 0),
-    [session.cart]
-  );
 
   const [searchStr, setSearchStr] = useState('');
-  // const debouncedSearchStr = useDebounce(searchStr, 500);
   const debouncedSearchStr = useThrottle(searchStr, 500);
 
   const deferredStr = useDeferredValue(searchStr, 'xxx');
-  // useEffect(() => {
-  //   clearTimeout(searchStr);
-  // }, [deferredStr]);
 
   const [searchResult, setSearchResult] = useState<ItemType[]>([]);
   const [isSearching, startSearchTransition] = useTransition();
@@ -122,26 +49,32 @@ export default function My() {
     },
     []
   );
-  /* my poor answer
-    type UserInfo = {
-      userId: number
-      id: number,
-      title: string,
-      body: string
-    }
-  
-    const [list, getUserList, isLoading] = useActionState(
-      async (preUser: UserInfo[], formData: FormData) => {
-        let list;
-        const userId = Number(formData.get('userId'))
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        const userInfo = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
-          .then((res) => res.json())
-        return userInfo
-      }, []
-    )*/
-  // useActionState()
 
+  /*------------------------------------------------*/
+  const { session } = useSession();
+  const [badSec, setBadSec] = useState(0);
+  const [goodSec, setGoodSec] = useState(0);
+
+  useEffect(() => {
+    setInterval(() => setBadSec((p) => p + 1), 1000);
+  }, []);
+
+  const ff = () => {
+    setGoodSec((p) => p + 1);
+  };
+  const { reset, clear } = useInterval(ff, 1000);
+
+  /*useMemo
+  성능 향상을 위해 결과 값을 메모이제이션 해놓는 훅 (불필요한 리렌더링 줄임)
+  렌더링 사이에 계산 결과를 캐싱할 수 있게 해주는 훅
+  주의사항: 리액트 공식 문서에 따르면 해당 훅은 오로지 성능 향상을 위해 사용이 되어야 한다고 함.
+  그런데 React 19 버전부터 react compiler가 이 메모이제이션을 어느정도 지원해서 알아서 최적화해주기 때문에
+  useMemo를 사용하는 일이 훨씬 적어졌다.
+  */
+  const totalPrice = useMemo(
+    () => session.cart.reduce((acc, item) => acc + item.price, 0),
+    [session.cart]
+  );
 
   return (
     <>
@@ -150,10 +83,13 @@ export default function My() {
       </h1>
       <div className='flex'>
         <button onClick={reset}>reset</button>
-        <button onClick={clear}>clear</button>
+        <button onClick={clear}>stop</button>
       </div>
-      {session?.loginUser ? <Profile ref={profileHandlerRef} /> : <Login />}
-      <hr />
+
+
+
+      {/* {session?.loginUser ? <Profile ref={profileHandlerRef} /> : <Login />} */}
+      {/* <hr />
       <a
         href='#!'
         onClick={(e) => {
@@ -163,50 +99,36 @@ export default function My() {
         }}
       >
         {item101?.name}
-      </a>
+      </a> */}
       <h2 className='text-xl'>Tot: {totalPrice.toLocaleString()}원</h2>
-      <Posts />
+      {/* <Posts />
       {isPending ? (
         <Spinner />
       ) : (
         <div>SR_ActionState :{results.map((item) => item.name).join()}</div>
-      )}
+      )} */}
 
-      <div>SR_Transition: {searchResult.map((item) => item.name).join()}</div>
+      {/* <div>SR_Transition: {searchResult.map((item) => item.name).join()}</div>
       {isSearching ? (
         <Spinner />
       ) : (
         <h2 className='text-xl text-red-500'>
           {searchStr} : {deferredStr} : {debouncedSearchStr}
         </h2>
-      )}
-      {/* <form action={getUserList}>
-        <LabelInput placeholder='userId...' label='userId'></LabelInput>
-        {isLoading ?
-          <>
-            searching...
-            <Button disabled={true}>searching...</Button>
-          </> :
-          <>
-            <Button>search</Button>
-            {JSON.stringify(list)}
-          </>
-        }
-      </form> */}
+      )} */}
 
-      {/* <form action={search}> */}
       <form className='flex gap-2'>
         <LabelInput label='ActionState' autoComplete='off' />
         <button formAction={search}>Action</button>
         <SearchButton />
       </form>
 
-      <LabelInput
+      {/* <LabelInput
         label='Transition'
         onChange={handleSearch}
         autoComplete='off'
-      />
-      <ul>
+      /> */}
+      {/* <ul>
         {session.cart
           ?.filter((item) => item.name.includes(debouncedSearchStr))
           .map((item) => (
@@ -226,7 +148,7 @@ export default function My() {
             </Btn>
           )}
         </li>
-      </ul>
+      </ul> */}
     </>
   );
 }
