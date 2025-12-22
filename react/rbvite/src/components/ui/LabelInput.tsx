@@ -9,6 +9,7 @@ type Props = {
   placeholder?: string;
   className?: string;
   required?: boolean;
+  autoComplete?: '' | 'off' | 'email' | 'tel';
 };
 
 export default function LabelInput({
@@ -20,6 +21,7 @@ export default function LabelInput({
   placeholder,
   className,
   required,
+  autoComplete,
 }: Props) {
   const inputId = useId();
   // console.log('🚀 ~ inputId:', inputId);
@@ -34,12 +36,14 @@ export default function LabelInput({
       <input
         type={type || 'text'}
         id={inputId}
+        name={label}
         ref={ref}
         defaultValue={defaultValue}
         onChange={onChange}
         placeholder={placeholder}
         className={`w-full ${className}`}
         required={required}
+        autoComplete={autoComplete}
       />
     </div>
   );

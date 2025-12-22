@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// useInterval(() => setGoodSec((p) => p + 1, 1000);
+>>>>>>> 20251219
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -22,19 +26,31 @@ export function useInterval_OLD<T extends (...args: Parameters<T>) => void>(
   }, []);
 }
 
+<<<<<<< HEAD
 function useTime<T extends (...arge: Parameters<T>) => void>(
+=======
+function useTime<T extends (...args: Parameters<T>) => void>(
+>>>>>>> 20251219
   f: typeof setTimeout | typeof setInterval,
   cb: T,
   delay: number,
   ...args: Parameters<T>
 ) {
   // const [timer, setTimer] = useState<ReturnType<typeof f>>();
+<<<<<<< HEAD
+=======
+  // const dtimer = useDeferredValue(timer);
+>>>>>>> 20251219
   const timerRef = useRef<ReturnType<typeof f>>(undefined);
 
   const setTime = () => {
     timerRef.current = f(() => {
       cb(...args);
+<<<<<<< HEAD
       timerRef.current = undefined
+=======
+      if (f === setTimeout) timerRef.current = undefined;
+>>>>>>> 20251219
     }, delay);
   };
   // const clear = () =>
@@ -44,10 +60,18 @@ function useTime<T extends (...arge: Parameters<T>) => void>(
   const clear = () => {
     if (!timerRef.current) return;
     (f === setTimeout ? clearTimeout : clearInterval)(timerRef.current);
+<<<<<<< HEAD
     timerRef.current = undefined
   }
 
   const reset = () => {
+=======
+    timerRef.current = undefined;
+  };
+
+  const reset = () => {
+    console.log('*********', timerRef.current);
+>>>>>>> 20251219
     clear();
     setTime();
   };
@@ -60,6 +84,43 @@ function useTime<T extends (...arge: Parameters<T>) => void>(
 
   return { clear, reset, timerRef };
 }
+<<<<<<< HEAD
+=======
+// function time_OLD<T extends () => void>(
+//   f: typeof setTimeout | typeof setInterval,
+//   cb: T,
+//   delay: number,
+//   ...args: Parameters<T>
+// ) {
+//   const [timer, setTimer] = useState<ReturnType<typeof f>>();
+
+//   const setTime = () => {
+//     const timer = f(cb, delay, ...args);
+//     setTimer(timer);
+//     return timer;
+//   };
+//   const clear = (t?: ReturnType<typeof f>) =>
+//     f === setTimeout ? clearTimeout(t || timer) : clearInterval(t || timer);
+//   const reset = () => {
+//     clear();
+//     // setTimer(f(cb, delay, ...args));
+//     setTime();
+//   };
+
+//   useEffect(() => {
+//     // const timer = f(cb, delay, ...args);
+//     // setTimer(timer);
+
+//     // setTimer(f(cb, delay, ...args));
+//     const timer = setTime();
+
+//     // return () => clearTimeout(timer);
+//     return () => clear(timer);
+//   }, []);
+
+//   return { clear, reset };
+// }
+>>>>>>> 20251219
 
 export function useInterval<T extends (...args: Parameters<T>) => void>(
   cb: T,
@@ -77,6 +138,11 @@ export function useTimeout<T extends (...args: Parameters<T>) => void>(
   return useTime(setTimeout, cb, delay, ...args);
 }
 
+<<<<<<< HEAD
+=======
+// const [searchStr, setSearchStr] = useState('');
+// const dv = useDebounce(searchStr, delay) ===> filter
+>>>>>>> 20251219
 export function useDebounce<T>(state: T, delay: number, deps: unknown[] = []) {
   const [debouncedValue, setDebouncedValue] = useState<T>(state);
   const { reset } = useTimeout(() => setDebouncedValue(state), delay);
@@ -102,6 +168,7 @@ export function useDebounceWithoutTimerHook<T>(
   return debouncedValue;
 }
 
+<<<<<<< HEAD
 export function useThrottleWithoutTimerHook<T>(state: T, delay: number, deps: unknown[] = []) {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [throttleValue, setThrottleValue] = useState<T>(state);
@@ -138,3 +205,38 @@ export function useThrottle<T>(state: T, delay: number, deps: unknown[] = []) {
 
 // useRef를 사용한 이유?
 // useDeferredValue
+=======
+export function useThrottle<T>(state: T, delay: number, deps: unknown[] = []) {
+  const [throttledValue, setThrottledValue] = useState<T>(state);
+  const { timerRef, reset } = useTimeout(setThrottledValue, delay, state);
+  useEffect(() => {
+    if (timerRef.current) return;
+    reset();
+  }, [state, ...deps]);
+
+  return throttledValue;
+}
+export function useThrottleWithoutTimeHook<T>(
+  state: T,
+  delay: number,
+  deps: unknown[] = []
+) {
+  const [throttledValue, setThrottledValue] = useState<T>(state);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    if (timerRef.current) return;
+
+    timerRef.current = setTimeout(() => {
+      setThrottledValue(state);
+      timerRef.current = undefined;
+    }, delay);
+
+    // return () => {
+    //   clearTimeout(timerRef.current);
+    //   timerRef.current = undefined;
+    // };
+  }, [state, ...deps]);
+
+  return throttledValue;
+}
+>>>>>>> 20251219
