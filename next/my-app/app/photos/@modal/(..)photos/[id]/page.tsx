@@ -22,7 +22,14 @@ export default function PhotoModal({ params }: Props) {
   return (
     <Modal>
       <h1>{photo.author}</h1>
-      <Image src={photo.download_url} alt="xxx" width={200} height={200} />
+      <Image
+        src={photo.download_url}
+        alt="xxx"
+        width={200}
+        height={200}
+        placeholder="blur"
+        blurDataURL="/public/file.svg"
+      />
     </Modal>
   );
 }

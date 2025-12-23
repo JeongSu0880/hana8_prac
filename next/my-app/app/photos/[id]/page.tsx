@@ -17,11 +17,18 @@ export default function PhotoPage({ params }: Props) {
     download_url: string;
     author: string;
   } = use(photoData);
-
+  // fetch 결과에 as로 타입 잡고 디스트럭처링하기
   return (
     <div>
       <h1>{photo.author}</h1>
-      <Image src={photo.download_url} alt="xxx" width={200} height={200} />
+      <Image
+        src={photo.download_url}
+        alt="xxx"
+        width={200}
+        height={200}
+        quality={70}
+        loading="lazy"
+      />
       {photo.download_url}
     </div>
   );
