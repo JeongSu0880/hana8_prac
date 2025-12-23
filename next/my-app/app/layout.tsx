@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Link from 'next/link';
-import { COMMENT_NUM } from './(routes)/hi/[time]/comments/[...slug]/constants';
 import './globals.css';
 
 const geistSans = Geist({
@@ -35,29 +34,8 @@ export default function RootLayout({
           <Link href="/shop/123">123</Link>|
           <Link href="/shop/123/456">456</Link> |
           {/* <Link href="/hi/morning/comments/1">moring 1</Link> */}
-          {COMMENT_NUM.map((num) => {
-            if (1 <= num && num <= 3)
-              return (
-                <Link key={num} href={`/hi/morning/comments/${num}`}>
-                  moring {num}
-                </Link>
-              );
-            if (4 <= num && num <= 6)
-              return (
-                <Link key={num} href={`/hi/afternoon/comments/${num}`}>
-                  afternoon {num}
-                </Link>
-              );
-            if (7 <= num && num <= 9)
-              return (
-                <Link key={num} href={`/hi/evening/comments/${num}`}>
-                  evening {num}
-                </Link>
-              );
-            return <></>;
-          })}
         </nav>
-        children
+        {children}
         <footer>footer</footer>
       </body>
     </html>
