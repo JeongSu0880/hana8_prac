@@ -18,8 +18,8 @@ export const generateStaticParams = async () => {
 };
 
 export default function Page() {
-  const data = fetch('https://picsum.photos/v2/list?limit=10').then((res) =>
-    res.json(),
+  const data = fetch('https://picsum.photos/v2/list?limit=10').then(
+    (res) => res.json(), // 이런시긍로 fetch로 데이터를 가져오는 경우에 정적 페이지는 옳지 않다. (요청의 결과가 어떨지 모르니까)
   ); // 이거 그냥 함수로 빼고 n 받기
   const photos = use(data);
   //   console.log(photos);

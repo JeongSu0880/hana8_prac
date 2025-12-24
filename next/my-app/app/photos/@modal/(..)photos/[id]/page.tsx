@@ -8,6 +8,9 @@ type Props = {
   }>;
 };
 
+export const dynamicParams = false;
+//intercept 라우터에서 에러가 나면 그냥 인터셒ㅂ트 무시됨.
+
 export default function PhotoModal({ params }: Props) {
   const { id } = use(params);
   const photoData = fetch(`https://picsum.photos/id/${id}/info`).then((data) =>
