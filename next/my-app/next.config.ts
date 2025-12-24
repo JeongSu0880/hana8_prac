@@ -16,3 +16,5 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 
 //바바 여기서 cacheComponent를 쓰는 것과 안쓰는 것은 매우 달라.
+// 이걸 활성화 시키면 전체 프로젝트 구조가 싹 바뀜.
+//

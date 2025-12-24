@@ -1,6 +1,7 @@
 'use client'; // 엄밀히 말하면 SayHello 안에 이걸 붙여야 함.
 import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import SayHello from './SayHello';
 
 export default function HelloPage() {
@@ -9,10 +10,10 @@ export default function HelloPage() {
   return (
     <>
       <h1>Hello Page:{pathname}</h1>
-      <SayHello name={'Next'} />
-      {/* <Suspense fallback={<h1>,,,</h1>}> */}
-      <SearcParamId />
-      {/* </Suspense>{' '} */}
+      <Suspense fallback={<h1>,,,</h1>}>
+        <SayHello name={'Next'} />
+        <SearcParamId />
+      </Suspense>
       {/* 이건 비동기만.. */}
     </>
   );

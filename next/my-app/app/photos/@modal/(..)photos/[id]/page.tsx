@@ -1,4 +1,6 @@
+'use cache';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { use } from 'react';
 import Modal from '@/components/modal';
 
@@ -8,11 +10,12 @@ type Props = {
   }>;
 };
 
-export const dynamicParams = false;
+// export const dynamicParams = false;
 //intercept 라우터에서 에러가 나면 그냥 인터셒ㅂ트 무시됨.
 
-export default function PhotoModal({ params }: Props) {
+export default async function PhotoModal({ params }: Props) {
   const { id } = use(params);
+  if (id > '10') notFound(); //이런식으로 처리하면 됨. (정해진 것만 쓸 수 있으니까)
   const photoData = fetch(`https://picsum.photos/id/${id}/info`).then((data) =>
     data.json(),
   );
