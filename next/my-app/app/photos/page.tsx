@@ -9,6 +9,14 @@ import { use } from 'react';
 // const getPhotos = async (n: number = 10): Promise<Photo[]> =>
 //   fetch(`https://picsum.photos/v2/list?limit=${n}`).then((res) => res.json());
 
+export const generateStaticParams = async () => {
+  // const photos: Awaited<Photo> = await fetch(//이게 정석임.
+  const photos = await fetch(`https://picsum.photos/v2/list?limit=10`).then(
+    (res) => res.json(),
+  ); // as Photo -> 이런식으로 타입을 잡는건 async에서는 좋지 않다.
+  //이런식으로 인터셉트 라우트도 SSG로 만들 수 잇따.
+};
+
 export default function Page() {
   const data = fetch('https://picsum.photos/v2/list?limit=10').then((res) =>
     res.json(),

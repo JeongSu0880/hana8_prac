@@ -28,7 +28,7 @@ export default function PhotoModal({ params }: Props) {
         width={200}
         height={200}
         placeholder="blur"
-        blurDataURL="/public/file.svg"
+        blurDataURL="/public/file.svg" //이거 svg이면 dev 환경에서만 적용이 됨. base64만 가능
       />
     </Modal>
   );

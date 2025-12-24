@@ -1,4 +1,5 @@
 'use client'; // 엄밀히 말하면 SayHello 안에 이걸 붙여야 함.
+import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SayHello from './SayHello';
 
@@ -29,7 +30,7 @@ function SearcParamId() {
   const make200 = () => {
     params.set('id', '200');
     //w주소를 아예 바꾼 것 PPR...,
-    router.push(`${id}?${params.toString()}`);
+    router.push(`${id}?${params.toString()}` as Route);
   };
   return <button onClick={make200}>make 200</button>;
 }

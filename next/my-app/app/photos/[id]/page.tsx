@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { use } from 'react';
 
 type Props = {
@@ -29,6 +30,7 @@ export default function PhotoPage({ params }: Props) {
         quality={70}
         loading="lazy"
       />
+      <Link href="/photos"></Link>
       {photo.download_url}
     </div>
   );
