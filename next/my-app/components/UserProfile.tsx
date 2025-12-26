@@ -32,3 +32,8 @@ export default function UserProfile() {
     </HoverCard>
   );
 }
+//대충 hoverCardTrigger는
+//1. 모바일에는 hover라는 것이 없기 때문에 사용하면 안됨.
+//2. 그리고 매번 마우스를 영역에서 나갔다가 hover해야지만 실행이 됨. 
+
+// 이 대안으로 popover!
