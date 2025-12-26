@@ -1,24 +1,17 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@radix-ui/react-hover-card';
-
 const DummyProfileImage = '/profile_dummy.png';
 
 export default function UserProfile() {
   // const isModile = i
   // const isModbie() =< {]}
   return (
-<Popover>
+    <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">Open popover</Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="leading-none font-medium">Dimensions</h4>
+            <h4 className="font-medium leading-none">Dimensions</h4>
             <p className="text-muted-foreground text-sm">
               Set the dimensions for the layer.
             </p>
@@ -63,7 +56,7 @@ export default function UserProfile() {
   );
 }
 //대충 hoverCardTrigger는
-//1. 모바일에는 hover라는 것이 없기 때문에 사용하면 안됨.
-//2. 그리고 매번 마우스를 영역에서 나갔다가 hover해야지만 실행이 됨. 
+//1. 모바일에는 hover라는 것이 없기 때문에 isMobile을 사용해서 다로 처리를 해줘야함
+//2. 그리고 매번 마우스를 영역에서 나갔다가 hover해야지만 실행이 됨.
 
 // 이 대안으로 popover!
