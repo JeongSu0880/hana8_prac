@@ -5,6 +5,7 @@ import { ModeToggle } from '@/components/ModeToggle';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import './globals.css';
+import UserProfile from '@/components/UserProfile';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,6 +49,7 @@ export default function RootLayout({
               <Button variant={'apply'}>SignIn</Button>
             </div>
             <ModeToggle />
+            <UserProfile />
           </nav>
           <div className="border p-3">{children}</div>
           <footer className="text-center">Footer</footer>
