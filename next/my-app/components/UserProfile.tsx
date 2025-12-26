@@ -11,25 +11,55 @@ export default function UserProfile() {
   // const isModile = i
   // const isModbie() =< {]}
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <div className="h-10 w-10">
-          <Avatar>
-            <AvatarImage src={DummyProfileImage} />
-            <AvatarFallback>VC</AvatarFallback>
-          </Avatar>
+<Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open popover</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="leading-none font-medium">Dimensions</h4>
+            <p className="text-muted-foreground text-sm">
+              Set the dimensions for the layer.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="width">Width</Label>
+              <Input
+                id="width"
+                defaultValue="100%"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxWidth">Max. width</Label>
+              <Input
+                id="maxWidth"
+                defaultValue="300px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="height">Height</Label>
+              <Input
+                id="height"
+                defaultValue="25px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxHeight">Max. height</Label>
+              <Input
+                id="maxHeight"
+                defaultValue="none"
+                className="col-span-2 h-8"
+              />
+            </div>
+          </div>
         </div>
-      </HoverCardTrigger>
-      <HoverCardContent className="w-80">
-        <div className="grid grid-cols-3 rounded-3xl border bg-white">
-          <Avatar>
-            <AvatarImage src={DummyProfileImage} />
-            <AvatarFallback>VC</AvatarFallback>
-          </Avatar>
-          <div>@guest guest@gmail.com 12 Books23 Marks 00 Followers</div>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+      </PopoverContent>
+    </Popover>
   );
 }
 //대충 hoverCardTrigger는
