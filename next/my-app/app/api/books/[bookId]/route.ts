@@ -6,13 +6,21 @@ type Params = {
   params: Promise<{ bookId: string }>;
 };
 
-const getBook = async ({ params }: Params, isIndex: boolean) => {
+type ReturnBookOrIndex<T extends boolean = false> = T extends true
+  ? number
+  : Book;
+
+const getBook = async <T extends boolean = false>(
+  { params }: Params,
+  isIndex?: T,
+) => {
   const { bookId } = await params;
   const fn = isIndex ? books.findIndex : books.find;
   const book = fn.bind(books)((book) => book.id === +bookId);
 
-  if (!book) throw new HttpError(`Notfound ${bookId}`, 404);
-  return book;
+  if (book !== -1 || book === undefined)
+    throw new HttpError(`Notfound ${bookId}`, 404);
+  return book as ReturnBookOrIndex<T>;
 };
 //여기서 PATCH 요청에 에러가 났던 이유
 // books.__proto__ == Array.prototype
@@ -22,7 +30,7 @@ const getBook = async ({ params }: Params, isIndex: boolean) => {
 export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     // console.log(await req.json());
-    const book = (await getBook({ params }, false)) as Book;
+    const book = await getBook({ params }, false);
     const { title, writer } = await req.json();
 
     book.title = title;
